@@ -1,6 +1,6 @@
 [package]
 name = "nl-cli"
-version = "0.1.2"
+version = "0.1.0"
 edition = "2021"
 description = "CLI for Newsleopard EDM API and Surenotify transactional messaging API"
 rust-version = "1.75"
@@ -12,7 +12,7 @@ keywords = ["cli", "email", "marketing", "edm", "newsletter"]
 categories = ["command-line-utilities"]
 
 [[bin]]
-name = "nl"
+name = "nlm"
 path = "src/main.rs"
 
 [dependencies]
