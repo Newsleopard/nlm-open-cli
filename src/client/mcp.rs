@@ -149,7 +149,7 @@ impl<'a> McpClient<'a> {
         let mut req = self
             .client
             .http
-            .post(&self.mcp_url())
+            .post(self.mcp_url())
             .header("x-api-key", &self.api_key)
             .header("content-type", "application/json");
         if let Some(ref sid) = self.session_id {
