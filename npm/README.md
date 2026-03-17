@@ -7,7 +7,7 @@ This npm package downloads the pre-built `nlm` binary for your platform from [Gi
 ## Install
 
 ```bash
-npm install -g @newsleopard/nl-cli
+npm install -g @newsleopard/nlm-cli
 ```
 
 ## Usage

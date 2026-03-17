@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Report a bug in nl-cli
+about: Report a bug in nlm-cli
 title: ''
 labels: bug
 assignees: ''

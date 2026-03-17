@@ -10,10 +10,10 @@ use serde_json::json;
 use wiremock::matchers::{body_json, header, method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
-use nl_cli::client::surenotify::SurenotifyClient;
-use nl_cli::client::ApiClient;
-use nl_cli::error::NlError;
-use nl_cli::types::surenotify::*;
+use nlm_cli::client::surenotify::SurenotifyClient;
+use nlm_cli::client::ApiClient;
+use nlm_cli::error::NlError;
+use nlm_cli::types::surenotify::*;
 
 /// Shared test setup: start a mock server and create a non-dry-run ApiClient.
 async fn setup() -> (MockServer, ApiClient) {

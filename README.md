@@ -47,13 +47,13 @@ Manage email campaigns, transactional messages, contacts, templates, and reports
 ### npm
 
 ```bash
-npm install -g @newsleopard/nl-cli
+npm install -g @newsleopard/nlm-cli
 ```
 
 ### Cargo
 
 ```bash
-cargo install nl-cli
+cargo install nlm-cli
 ```
 
 ### GitHub Releases

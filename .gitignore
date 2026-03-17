@@ -22,3 +22,7 @@ Thumbs.db
 
 # Insta snapshot review artifacts
 *.pending-snap
+
+# npm: downloaded native binary (wrapper scripts are tracked, binary is not)
+npm/bin/nlm-binary
+npm/bin/nlm-binary.exe

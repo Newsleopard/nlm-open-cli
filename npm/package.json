@@ -1,5 +1,5 @@
 {
-  "name": "@newsleopard/nl-cli",
+  "name": "@newsleopard/nlm-cli",
   "version": "0.1.1",
   "description": "CLI for Newsleopard EDM API and Surenotify transactional messaging",
   "license": "(MIT OR Apache-2.0)",
@@ -9,8 +9,7 @@
   },
   "homepage": "https://github.com/Newsleopard/nlm-open-cli",
   "bin": {
-    "nlm": "bin/nlm",
-    "nl": "bin/nl"
+    "nlm": "bin/nlm"
   },
   "scripts": {
     "postinstall": "node install.js"

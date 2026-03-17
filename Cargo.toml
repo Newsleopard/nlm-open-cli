@@ -1,5 +1,5 @@
 [package]
-name = "nl-cli"
+name = "nlm-cli"
 version = "0.1.1"
 edition = "2021"
 description = "CLI for Newsleopard EDM API and Surenotify transactional messaging API"

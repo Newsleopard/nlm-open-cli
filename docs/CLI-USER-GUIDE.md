@@ -9,7 +9,7 @@
 brew install newsleopard/tap/nlm
 
 # Cargo
-cargo install nl-cli
+cargo install nlm-cli
 
 # 從原始碼
 git clone https://github.com/Newsleopard/nlm-open-cli.git && cd nlm-open-cli

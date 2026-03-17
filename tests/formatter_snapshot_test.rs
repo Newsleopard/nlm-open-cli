@@ -10,7 +10,7 @@
 //! or set INSTA_UPDATE=always to accept automatically:
 //!   INSTA_UPDATE=always cargo test --test formatter_snapshot_test
 
-use nl_cli::formatter::{csv_fmt, json, table, yaml};
+use nlm_cli::formatter::{csv_fmt, json, table, yaml};
 use serde_json::json;
 
 // ─────────────────────────────────────────────────────────────────────────────

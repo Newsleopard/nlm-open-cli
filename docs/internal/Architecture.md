@@ -54,7 +54,7 @@
 ## 2. 專案結構
 
 ```
-nl-cli/
+nlm-cli/
 ├── Cargo.toml
 ├── src/
 │   ├── main.rs                    # Entry point: parse args, init tracing, run executor
@@ -117,7 +117,7 @@ nl-cli/
 
 ```toml
 [package]
-name = "nl-cli"
+name = "nlm-cli"
 version = "0.1.0"
 edition = "2021"
 description = "Newsleopard EDM & Surenotify CLI"

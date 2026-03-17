@@ -42,7 +42,7 @@ The user may need one or both, depending on their use case.
 **Preferred — npm (no Rust toolchain needed):**
 
 ```bash
-npm install -g @newsleopard/nl-cli
+npm install -g @newsleopard/nlm-cli
 ```
 
 **Fallback — GitHub Releases (if npm is unavailable):**
@@ -62,7 +62,7 @@ After downloading, make the binary executable (`chmod +x nlm`) and move it to a 
 **Fallback — Cargo (if Rust toolchain is available):**
 
 ```bash
-cargo install nl-cli
+cargo install nlm-cli
 ```
 
 **Verify installation:**

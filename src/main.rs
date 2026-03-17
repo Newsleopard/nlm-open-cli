@@ -2,8 +2,8 @@ use clap::Parser;
 use std::process;
 use tracing_subscriber::EnvFilter;
 
-use nl_cli::cli::NlCli;
-use nl_cli::executor;
+use nlm_cli::cli::NlCli;
+use nlm_cli::executor;
 
 #[tokio::main]
 async fn main() {

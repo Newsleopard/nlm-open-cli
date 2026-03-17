@@ -1,4 +1,4 @@
-# Contributing to nl-cli
+# Contributing to nlm-cli
 
 We welcome contributions! Here's how to get started.
 

@@ -7,9 +7,9 @@ use serde_json::json;
 use wiremock::matchers::{header, method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
-use nl_cli::client::mcp::McpClient;
-use nl_cli::client::ApiClient;
-use nl_cli::error::NlError;
+use nlm_cli::client::mcp::McpClient;
+use nlm_cli::client::ApiClient;
+use nlm_cli::error::NlError;
 
 const TEST_API_KEY: &str = "test-mcp-key-abc123";
 

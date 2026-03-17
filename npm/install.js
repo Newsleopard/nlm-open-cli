@@ -85,12 +85,14 @@ function extractZip(buffer, destDir) {
 async function main() {
   const target = getTarget();
   const { url, ext, isWindows } = getArchiveInfo(target);
-  const binaryName = isWindows ? "nlm.exe" : "nlm";
-  const binaryPath = path.join(BIN_DIR, binaryName);
+  // Download as "nlm-binary" so it doesn't conflict with the Node.js wrapper "nlm"
+  const extractedName = isWindows ? "nlm.exe" : "nlm";
+  const finalName = isWindows ? "nlm-binary.exe" : "nlm-binary";
+  const finalPath = path.join(BIN_DIR, finalName);
 
   // Skip if binary already exists (e.g., CI caching)
-  if (fs.existsSync(binaryPath)) {
-    console.log(`nlm binary already exists at ${binaryPath}, skipping download.`);
+  if (fs.existsSync(finalPath)) {
+    console.log(`nlm binary already exists at ${finalPath}, skipping download.`);
     return;
   }
 
@@ -99,40 +101,38 @@ async function main() {
 
   const buffer = await download(url);
 
-  fs.mkdirSync(BIN_DIR, { recursive: true });
+  // Extract to a temp directory to avoid overwriting the Node.js wrapper scripts in bin/
+  const tmpDir = path.join(__dirname, ".tmp-extract");
+  fs.mkdirSync(tmpDir, { recursive: true });
 
   if (ext === "zip") {
-    extractZip(buffer, BIN_DIR);
+    extractZip(buffer, tmpDir);
   } else {
-    extractTarGz(buffer, BIN_DIR);
+    extractTarGz(buffer, tmpDir);
   }
 
-  // Verify the binary was extracted
-  if (!fs.existsSync(binaryPath)) {
-    console.error(`Error: Expected binary not found at ${binaryPath} after extraction.`);
+  // The archive contains "nlm"; move it to bin/ as "nlm-binary" to avoid conflicting
+  // with the Node.js wrapper script that npm links as the "nlm" command
+  const extractedPath = path.join(tmpDir, extractedName);
+  if (!fs.existsSync(extractedPath)) {
+    console.error(`Error: Archive did not contain expected "${extractedName}" binary.`);
+    // Clean up temp dir
+    fs.rmSync(tmpDir, { recursive: true, force: true });
     process.exit(1);
   }
 
+  fs.mkdirSync(BIN_DIR, { recursive: true });
+  fs.renameSync(extractedPath, finalPath);
+
+  // Clean up temp directory
+  fs.rmSync(tmpDir, { recursive: true, force: true });
+
   // Set executable permissions on Unix
   if (!isWindows) {
-    fs.chmodSync(binaryPath, 0o755);
+    fs.chmodSync(finalPath, 0o755);
   }
 
-  console.log(`Installed nlm v${VERSION} to ${binaryPath}`);
-
-  // Create backward-compatible "nl" symlink
-  const legacyName = isWindows ? "nl.exe" : "nl";
-  const legacyPath = path.join(BIN_DIR, legacyName);
-  try {
-    if (fs.existsSync(legacyPath)) fs.unlinkSync(legacyPath);
-    if (isWindows) {
-      fs.copyFileSync(binaryPath, legacyPath);
-    } else {
-      fs.symlinkSync(binaryName, legacyPath);
-    }
-  } catch (_) {
-    // Non-fatal: legacy alias is optional
-  }
+  console.log(`Installed nlm v${VERSION} to ${finalPath}`);
 }
 
 main().catch((err) => {

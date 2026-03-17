@@ -442,7 +442,7 @@ CLI 應在送出前檢查：
 | 管道 | 指令 | 備註 |
 |------|------|------|
 | Homebrew | `brew install newsleopard/tap/nl` | macOS + Linux |
-| Cargo | `cargo install nl-cli` | 需要 Rust toolchain |
+| Cargo | `cargo install nlm-cli` | 需要 Rust toolchain |
 | GitHub Releases | 直接下載二進位 | 5 平台 pre-built |
 
 ---

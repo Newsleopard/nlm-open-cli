@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-`nlm` is a Rust CLI tool wrapping the Newsleopard EDM API (20 endpoints) and Surenotify API (14 endpoints) for email marketing and transactional messaging. Binary name: `nlm`, crate name: `nl-cli`.
+`nlm` is a Rust CLI tool wrapping the Newsleopard EDM API (20 endpoints) and Surenotify API (14 endpoints) for email marketing and transactional messaging. Binary name: `nlm`, crate name: `nlm-cli`.
 
 **Status:** Implemented — all modules complete and compiling. Internal design docs in `docs/internal/`.
 

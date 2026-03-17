@@ -8,10 +8,10 @@ use serde_json::json;
 use wiremock::matchers::{body_json, header, method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
-use nl_cli::client::edm::EdmClient;
-use nl_cli::client::ApiClient;
-use nl_cli::error::NlError;
-use nl_cli::types::edm::*;
+use nlm_cli::client::edm::EdmClient;
+use nlm_cli::client::ApiClient;
+use nlm_cli::error::NlError;
+use nlm_cli::types::edm::*;
 
 /// Shared test setup: start a mock server and create a non-dry-run ApiClient.
 async fn setup() -> (MockServer, ApiClient) {

@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+
+"use strict";
+
+const { execFileSync } = require("child_process");
+const path = require("path");
+const fs = require("fs");
+
+const isWindows = process.platform === "win32";
+const binaryName = isWindows ? "nlm-binary.exe" : "nlm-binary";
+const binaryPath = path.join(__dirname, binaryName);
+
+if (!fs.existsSync(binaryPath)) {
+  console.error(
+    "Error: nlm binary not found. The postinstall script may have failed.\n" +
+      "Try reinstalling: npm install -g @newsleopard/nlm-cli\n" +
+      "Or download manually: https://github.com/Newsleopard/nlm-open-cli/releases"
+  );
+  process.exit(1);
+}
+
+try {
+  execFileSync(binaryPath, process.argv.slice(2), {
+    stdio: "inherit",
+    env: process.env,
+  });
+} catch (err) {
+  if (err.status !== null) {
+    process.exit(err.status);
+  }
+  throw err;
+}
