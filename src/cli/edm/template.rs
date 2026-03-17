@@ -28,7 +28,9 @@ pub enum TemplateCommand {
 
     // ── MCP-backed commands ─────────────────────────────
     /// Save a campaign's content as a reusable template (via MCP)
-    #[command(after_long_help = "EXAMPLE:\n  nlm edm template save --campaign-sn CAM12345 --name 'Monthly Newsletter Template'")]
+    #[command(
+        after_long_help = "EXAMPLE:\n  nlm edm template save --campaign-sn CAM12345 --name 'Monthly Newsletter Template'"
+    )]
     Save {
         /// Campaign SN to save as template
         #[arg(long)]

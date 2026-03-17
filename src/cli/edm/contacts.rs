@@ -9,7 +9,9 @@ pub struct ContactsArgs {
 #[derive(clap::Subcommand, Debug)]
 pub enum ContactsCommand {
     /// Create a new contact group
-    #[command(after_long_help = "EXAMPLE:\n  nlm edm contacts create-group --name 'VIP Customers'")]
+    #[command(
+        after_long_help = "EXAMPLE:\n  nlm edm contacts create-group --name 'VIP Customers'"
+    )]
     CreateGroup {
         /// Group name
         #[arg(long)]

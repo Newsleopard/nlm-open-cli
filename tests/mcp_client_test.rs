@@ -106,7 +106,7 @@ async fn test_mcp_list_tools() {
                 "sessionId": "sess-1"
             }
         })))
-        .up_to_n_times(2) // init + notification
+        .up_to_n_times(2) // init + background notification (may or may not arrive)
         .mount(&server)
         .await;
 

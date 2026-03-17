@@ -9,7 +9,7 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use super::retry::with_retry;
+use super::retry::with_mcp_retry;
 use super::ApiClient;
 use crate::error::NlError;
 
@@ -87,7 +87,9 @@ impl<'a> McpClient<'a> {
     /// Performs the MCP initialize handshake to negotiate protocol version
     /// and obtain a session ID.
     ///
-    /// Called lazily on the first tool invocation.
+    /// Called lazily on the first tool invocation. The `notifications/initialized`
+    /// notification is sent as fire-and-forget in `ensure_initialized` so it
+    /// can overlap with the subsequent RPC call.
     pub async fn initialize(&mut self) -> Result<(), NlError> {
         if self.session_id.is_some() {
             return Ok(());
@@ -140,15 +142,31 @@ impl<'a> McpClient<'a> {
             }
         }
 
-        // Send initialized notification (no response expected, fire-and-forget).
-        let notif = JsonRpcRequest {
-            jsonrpc: "2.0",
-            id: self.next_id(),
-            method: "notifications/initialized".to_string(),
-            params: None,
-        };
-        // Best-effort: ignore errors on the notification.
-        let _ = self.send_raw(&notif).await;
+        // Fire the initialized notification in the background so it
+        // overlaps with the next RPC call instead of blocking.
+        let notif_url = self.mcp_url();
+        let notif_api_key = self.api_key.clone();
+        let notif_session_id = self.session_id.clone();
+        let notif_http = self.client.http.clone();
+
+        // NOTE: builds the request manually (duplicates header logic from
+        // send_raw) because this is fire-and-forget in a detached task.
+        tokio::spawn(async move {
+            // JSON-RPC notifications MUST NOT include an "id" field.
+            let body = serde_json::json!({
+                "jsonrpc": "2.0",
+                "method": "notifications/initialized"
+            });
+            let mut req = notif_http
+                .post(&notif_url)
+                .header("x-api-key", &notif_api_key)
+                .header("content-type", "application/json");
+            if let Some(ref sid) = notif_session_id {
+                req = req.header("mcp-session-id", sid);
+            }
+            // Best-effort: ignore errors on the notification.
+            let _ = req.json(&body).send().await;
+        });
 
         Ok(())
     }
@@ -276,7 +294,7 @@ impl<'a> McpClient<'a> {
         let body = serde_json::to_string(request)?;
         let http = self.client.http.clone();
 
-        with_retry(|| {
+        with_mcp_retry(|| {
             let url = url.clone();
             let api_key = api_key.clone();
             let session_id = session_id.clone();
