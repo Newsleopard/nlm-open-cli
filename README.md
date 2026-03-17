@@ -6,8 +6,8 @@
 
 Manage email campaigns, transactional messages, contacts, templates, and reports from a single command-line tool. Structured JSON output. Built-in rate limiting. Dry-run safety.
 
-[![CI](https://github.com/newsleopard/nl-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/newsleopard/nl-cli/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/newsleopard/nl-cli)](https://github.com/newsleopard/nl-cli/releases)
+[![CI](https://github.com/Newsleopard/nlm-open-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/Newsleopard/nlm-open-cli/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/Newsleopard/nlm-open-cli)](https://github.com/Newsleopard/nlm-open-cli/releases)
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](LICENSE-MIT)
 [![Rust: 1.75+](https://img.shields.io/badge/rust-1.75%2B-orange.svg)](https://www.rust-lang.org/)
 
@@ -50,15 +50,15 @@ cargo install nl-cli
 
 ### GitHub Releases
 
-Download pre-built binaries for your platform from [Releases](https://github.com/newsleopard/nl-cli/releases).
+Download pre-built binaries for your platform from [Releases](https://github.com/Newsleopard/nlm-open-cli/releases).
 
 Available targets: Linux (x86_64, arm64), macOS (x86_64, arm64), Windows (x86_64).
 
 ### Build from Source
 
 ```bash
-git clone https://github.com/newsleopard/nl-cli.git
-cd nl-cli
+git clone https://github.com/Newsleopard/nlm-open-cli.git
+cd nlm-open-cli
 cargo build --release
 # Binary at target/release/nl
 ```

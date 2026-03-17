@@ -2,7 +2,7 @@
 
 CLI for [NewsLeopard](https://www.newsleopard.com/) EDM API and SureNotify transactional messaging.
 
-This npm package downloads the pre-built `nl` binary for your platform from [GitHub Releases](https://github.com/newsleopard/nl-cli/releases).
+This npm package downloads the pre-built `nl` binary for your platform from [GitHub Releases](https://github.com/Newsleopard/nlm-open-cli/releases).
 
 ## Install
 
@@ -26,7 +26,7 @@ nl edm contacts list-groups --format table
 
 ## Documentation
 
-See the [full README](https://github.com/newsleopard/nl-cli) for complete documentation.
+See the [full README](https://github.com/Newsleopard/nlm-open-cli) for complete documentation.
 
 ## License
 

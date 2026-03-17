@@ -109,7 +109,10 @@ pub fn mask_api_key(key: &str) -> String {
 /// Handles 204 No Content, error responses (4xx/5xx) with optional structured error,
 /// and successful JSON bodies. The error response type must implement `Deserialize`
 /// and have `error_code: Option<u32>` and `message: String` fields.
-pub(crate) fn parse_api_response<E>(status: u16, body_text: &str) -> Result<serde_json::Value, NlError>
+pub(crate) fn parse_api_response<E>(
+    status: u16,
+    body_text: &str,
+) -> Result<serde_json::Value, NlError>
 where
     E: DeserializeOwned + std::fmt::Debug,
     for<'a> &'a E: Into<(Option<i64>, String)>,

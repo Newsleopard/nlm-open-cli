@@ -6,8 +6,8 @@
 
 透過單一命令列工具管理電子報活動、交易型訊息、聯絡人、範本與報告。結構化 JSON 輸出、內建限流、Dry-run 安全預覽。
 
-[![CI](https://github.com/newsleopard/nl-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/newsleopard/nl-cli/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/newsleopard/nl-cli)](https://github.com/newsleopard/nl-cli/releases)
+[![CI](https://github.com/Newsleopard/nlm-open-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/Newsleopard/nlm-open-cli/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/Newsleopard/nlm-open-cli)](https://github.com/Newsleopard/nlm-open-cli/releases)
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](LICENSE-MIT)
 [![Rust: 1.75+](https://img.shields.io/badge/rust-1.75%2B-orange.svg)](https://www.rust-lang.org/)
 
@@ -50,15 +50,15 @@ cargo install nl-cli
 
 ### GitHub Releases
 
-從 [Releases](https://github.com/newsleopard/nl-cli/releases) 頁面下載對應平台的預編譯執行檔。
+從 [Releases](https://github.com/Newsleopard/nlm-open-cli/releases) 頁面下載對應平台的預編譯執行檔。
 
 支援平台：Linux (x86_64, arm64)、macOS (x86_64, arm64)、Windows (x86_64)。
 
 ### 從原始碼編譯
 
 ```bash
-git clone https://github.com/newsleopard/nl-cli.git
-cd nl-cli
+git clone https://github.com/Newsleopard/nlm-open-cli.git
+cd nlm-open-cli
 cargo build --release
 # 執行檔位於 target/release/nl
 ```

@@ -280,6 +280,10 @@ fn csv_page_subsequent_omits_header() {
     let data = json!([{"id": "camp_001", "status": "sent"}]);
     let output = csv_fmt::format_csv_page(&data, false).unwrap();
     let lines: Vec<&str> = output.lines().collect();
-    assert_eq!(lines.len(), 1, "Subsequent CSV page must not include header");
+    assert_eq!(
+        lines.len(),
+        1,
+        "Subsequent CSV page must not include header"
+    );
     insta::assert_snapshot!(output);
 }

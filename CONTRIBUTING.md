@@ -5,8 +5,8 @@ We welcome contributions! Here's how to get started.
 ## Development Setup
 
 ```bash
-git clone https://github.com/newsleopard/nl-cli.git
-cd nl-cli
+git clone https://github.com/Newsleopard/nlm-open-cli.git
+cd nlm-open-cli
 cargo build
 cargo test
 ```

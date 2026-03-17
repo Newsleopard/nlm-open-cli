@@ -12,7 +12,7 @@ use reqwest::multipart;
 use serde_json::Value;
 
 use crate::client::retry::with_retry;
-use crate::client::{ApiClient, parse_api_response};
+use crate::client::{parse_api_response, ApiClient};
 use crate::error::NlError;
 use crate::types::edm::*;
 
@@ -360,10 +360,7 @@ impl<'a> EdmClient<'a> {
         let base_url = format!("{}/v1/report/campaigns", self.base_url);
 
         // Build URL with query params for dry-run check
-        let url = format!(
-            "{}?startDate={}&endDate={}",
-            base_url, start_date, end_date
-        );
+        let url = format!("{}?startDate={}&endDate={}", base_url, start_date, end_date);
 
         if let Some(err) = self.client.check_dry_run("GET", &url, &self.api_key, None) {
             return Err(err);
@@ -371,7 +368,8 @@ impl<'a> EdmClient<'a> {
 
         self.client.edm_limiter.until_ready().await;
 
-        self.get_with_report_params(&base_url, start_date, end_date).await
+        self.get_with_report_params(&base_url, start_date, end_date)
+            .await
     }
 
     /// POST /v1/report/campaigns/metrics — Fetch performance metrics for campaigns.
@@ -507,7 +505,12 @@ impl<'a> EdmClient<'a> {
     }
 
     /// Send a GET request with query parameters using proper URL encoding.
-    async fn get_with_query(&self, base_url: &str, page: Option<u32>, size: Option<u32>) -> Result<Value, NlError> {
+    async fn get_with_query(
+        &self,
+        base_url: &str,
+        page: Option<u32>,
+        size: Option<u32>,
+    ) -> Result<Value, NlError> {
         let api_key = self.api_key.clone();
         let client = self.client;
         let base_url = base_url.to_string();
@@ -543,7 +546,12 @@ impl<'a> EdmClient<'a> {
     }
 
     /// Send a GET request with date range query parameters.
-    async fn get_with_report_params(&self, base_url: &str, start_date: &str, end_date: &str) -> Result<Value, NlError> {
+    async fn get_with_report_params(
+        &self,
+        base_url: &str,
+        start_date: &str,
+        end_date: &str,
+    ) -> Result<Value, NlError> {
         let api_key = self.api_key.clone();
         let client = self.client;
         let base_url = base_url.to_string();
@@ -556,7 +564,9 @@ impl<'a> EdmClient<'a> {
             let start_date = start_date.clone();
             let end_date = end_date.clone();
             async move {
-                let req = client.http.get(&base_url)
+                let req = client
+                    .http
+                    .get(&base_url)
                     .header("x-api-key", &api_key)
                     .query(&[("startDate", &start_date), ("endDate", &end_date)]);
 
@@ -712,7 +722,6 @@ impl<'a> EdmClient<'a> {
         .await
     }
 }
-
 
 #[cfg(test)]
 mod tests {

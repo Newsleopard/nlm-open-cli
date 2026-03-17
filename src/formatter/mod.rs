@@ -34,10 +34,7 @@ pub(crate) fn flatten_json(value: &Value, prefix: &str) -> Vec<(String, String)>
                                 result.extend(flatten_json(item, &indexed_key));
                             }
                         } else {
-                            result.push((
-                                full_key,
-                                serde_json::to_string(val).unwrap_or_default(),
-                            ));
+                            result.push((full_key, serde_json::to_string(val).unwrap_or_default()));
                         }
                     }
                     _ => {

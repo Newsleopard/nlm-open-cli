@@ -31,7 +31,8 @@ pub async fn execute(
     }
 
     // 2. Build and submit campaign
-    let html_content = executor::resolve_campaign_html(fields.html.as_deref(), fields.html_file.as_deref())?;
+    let html_content =
+        executor::resolve_campaign_html(fields.html.as_deref(), fields.html_file.as_deref())?;
     executor::warn_edm_variable_syntax(&html_content);
     executor::warn_edm_variable_syntax(&fields.subject);
 
@@ -118,14 +119,18 @@ mod tests {
     #[test]
     fn test_resolve_html_inline() {
         let fields = make_fields(Some("<p>Hello</p>".into()), None);
-        let html = executor::resolve_campaign_html(fields.html.as_deref(), fields.html_file.as_deref()).unwrap();
+        let html =
+            executor::resolve_campaign_html(fields.html.as_deref(), fields.html_file.as_deref())
+                .unwrap();
         assert_eq!(html, "<p>Hello</p>");
     }
 
     #[test]
     fn test_resolve_html_missing() {
         let fields = make_fields(None, None);
-        let err = executor::resolve_campaign_html(fields.html.as_deref(), fields.html_file.as_deref()).unwrap_err();
+        let err =
+            executor::resolve_campaign_html(fields.html.as_deref(), fields.html_file.as_deref())
+                .unwrap_err();
         assert!(matches!(err, NlError::Validation(_)));
     }
 

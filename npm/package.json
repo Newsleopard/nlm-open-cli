@@ -5,9 +5,9 @@
   "license": "(MIT OR Apache-2.0)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/newsleopard/nl-cli.git"
+    "url": "https://github.com/Newsleopard/nlm-open-cli.git"
   },
-  "homepage": "https://github.com/newsleopard/nl-cli",
+  "homepage": "https://github.com/Newsleopard/nlm-open-cli",
   "bin": {
     "nl": "bin/nl"
   },

@@ -12,7 +12,7 @@ brew install newsleopard/tap/nl
 cargo install nl-cli
 
 # 從原始碼
-git clone https://github.com/newsleopard/nl-cli.git && cd nl-cli
+git clone https://github.com/Newsleopard/nlm-open-cli.git && cd nlm-open-cli
 cargo build --release
 ```
 

@@ -766,7 +766,10 @@ fn split_comma(s: &str) -> Vec<String> {
 }
 
 /// Resolve HTML content from either an inline string or a file path.
-pub(crate) fn resolve_campaign_html(html: Option<&str>, html_file: Option<&Path>) -> Result<String, NlError> {
+pub(crate) fn resolve_campaign_html(
+    html: Option<&str>,
+    html_file: Option<&Path>,
+) -> Result<String, NlError> {
     if let Some(html) = html {
         return Ok(html.to_string());
     }

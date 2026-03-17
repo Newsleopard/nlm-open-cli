@@ -253,11 +253,7 @@ impl<'a> McpClient<'a> {
         if let Some(err) = resp.error {
             // Preserve negative JSON-RPC error codes (e.g., -32601) safely as Option<i64>.
             // Clamp to None only if the code is negative (not representable as u32).
-            let code = if err.code < 0 {
-                None
-            } else {
-                Some(err.code)
-            };
+            let code = if err.code < 0 { None } else { Some(err.code) };
             return Err(NlError::Api {
                 status: 0,
                 code,

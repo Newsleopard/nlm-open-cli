@@ -10,7 +10,7 @@ use std::time::Instant;
 
 use serde_json::Value;
 
-use crate::client::{retry::with_retry, parse_api_response, ApiClient};
+use crate::client::{parse_api_response, retry::with_retry, ApiClient};
 use crate::error::NlError;
 use crate::types::surenotify::*;
 

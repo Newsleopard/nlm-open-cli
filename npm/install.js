@@ -9,7 +9,7 @@ const https = require("https");
 const http = require("http");
 
 const VERSION = require("./package.json").version;
-const REPO = "newsleopard/nl-cli";
+const REPO = "Newsleopard/nlm-open-cli";
 const BIN_DIR = path.join(__dirname, "bin");
 
 const PLATFORM_MAP = {
