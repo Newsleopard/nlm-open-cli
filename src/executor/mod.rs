@@ -3,7 +3,7 @@
 //! This module is the central dispatch point. It:
 //! 1. Handles config commands directly (no API client needed)
 //! 2. Loads configuration and creates the appropriate API client
-//! 3. Dispatches to the correct EDM, SureNotify, or helper sub-executor
+//! 3. Dispatches to the correct EDM, Surenotify, or helper sub-executor
 //! 4. Formats and prints the result
 
 use std::io::IsTerminal;
@@ -32,7 +32,7 @@ use crate::cli::{
 };
 use crate::client::edm::EdmClient;
 use crate::client::mcp::McpClient;
-use crate::client::surenotify::SureNotifyClient;
+use crate::client::surenotify::SurenotifyClient;
 use crate::client::ApiClient;
 use crate::config::{self, ResolvedConfig};
 use crate::error::NlError;
@@ -59,7 +59,7 @@ pub async fn execute(cli: NlCli) -> Result<(), NlError> {
             execute_edm(edm.command, &edm_client, &config, &client).await?
         }
         Command::Sn(sn) => {
-            let sn_client = SureNotifyClient::new(&client, config.sn_api_key()?);
+            let sn_client = SurenotifyClient::new(&client, config.sn_api_key()?);
             execute_sn(sn.command, &sn_client).await?
         }
         Command::Mcp(mcp) => execute_mcp(mcp.command, &config, &client).await?,
@@ -535,9 +535,9 @@ async fn execute_account(cmd: AccountCommand, edm: &EdmClient<'_>) -> Result<Val
     }
 }
 
-// ── SureNotify commands ─────────────────────────────────────────────────────
+// ── Surenotify commands ─────────────────────────────────────────────────────
 
-async fn execute_sn(cmd: SnCommand, sn: &SureNotifyClient<'_>) -> Result<Value, NlError> {
+async fn execute_sn(cmd: SnCommand, sn: &SurenotifyClient<'_>) -> Result<Value, NlError> {
     match cmd {
         SnCommand::Email(args) => execute_email(args.command, sn).await,
         SnCommand::Sms(args) => execute_sms(args.command, sn).await,
@@ -547,7 +547,7 @@ async fn execute_sn(cmd: SnCommand, sn: &SureNotifyClient<'_>) -> Result<Value, 
     }
 }
 
-async fn execute_email(cmd: EmailCommand, sn: &SureNotifyClient<'_>) -> Result<Value, NlError> {
+async fn execute_email(cmd: EmailCommand, sn: &SurenotifyClient<'_>) -> Result<Value, NlError> {
     match cmd {
         EmailCommand::Send {
             subject,
@@ -607,7 +607,7 @@ async fn execute_email(cmd: EmailCommand, sn: &SureNotifyClient<'_>) -> Result<V
     }
 }
 
-async fn execute_sms(cmd: SmsCommand, sn: &SureNotifyClient<'_>) -> Result<Value, NlError> {
+async fn execute_sms(cmd: SmsCommand, sn: &SurenotifyClient<'_>) -> Result<Value, NlError> {
     match cmd {
         SmsCommand::Send {
             content,
@@ -666,7 +666,7 @@ async fn execute_sms(cmd: SmsCommand, sn: &SureNotifyClient<'_>) -> Result<Value
     }
 }
 
-async fn execute_webhook(cmd: WebhookCommand, sn: &SureNotifyClient<'_>) -> Result<Value, NlError> {
+async fn execute_webhook(cmd: WebhookCommand, sn: &SurenotifyClient<'_>) -> Result<Value, NlError> {
     match cmd {
         WebhookCommand::Create { event_type, url } => {
             let etype = parse_webhook_event_type(&event_type)?;
@@ -688,7 +688,7 @@ async fn execute_webhook(cmd: WebhookCommand, sn: &SureNotifyClient<'_>) -> Resu
 
 async fn execute_sms_webhook(
     cmd: SmsWebhookCommand,
-    sn: &SureNotifyClient<'_>,
+    sn: &SurenotifyClient<'_>,
 ) -> Result<Value, NlError> {
     match cmd {
         SmsWebhookCommand::Create { event_type, url } => {
@@ -709,7 +709,7 @@ async fn execute_sms_webhook(
     }
 }
 
-async fn execute_domain(cmd: DomainCommand, sn: &SureNotifyClient<'_>) -> Result<Value, NlError> {
+async fn execute_domain(cmd: DomainCommand, sn: &SurenotifyClient<'_>) -> Result<Value, NlError> {
     match cmd {
         DomainCommand::Create { domain } => sn.create_domain(&domain).await,
         DomainCommand::Verify { domain } => sn.verify_domain(&domain).await,
@@ -749,7 +749,7 @@ async fn execute_helper(
             domain,
             auto_verify_after,
         } => {
-            let sn = SureNotifyClient::new(client, config.sn_api_key()?);
+            let sn = SurenotifyClient::new(client, config.sn_api_key()?);
             helpers::domain_setup::execute(&domain, auto_verify_after, &sn).await
         }
     }
@@ -871,23 +871,23 @@ fn parse_test_unit(unit: &str) -> Result<u8, NlError> {
     }
 }
 
-/// Warn if EDM content contains SureNotify-style `{{...}}` variables.
+/// Warn if EDM content contains Surenotify-style `{{...}}` variables.
 pub(crate) fn warn_edm_variable_syntax(content: &str) {
     let re = Regex::new(r"\{\{[^}]+\}\}").unwrap();
     if re.is_match(content) {
         eprintln!(
             "Warning: EDM API uses ${{FIELD}} variable syntax. \
-             Detected {{{{...}}}} format (SureNotify syntax)."
+             Detected {{{{...}}}} format (Surenotify syntax)."
         );
     }
 }
 
-/// Warn if SureNotify content contains EDM-style `${...}` variables.
+/// Warn if Surenotify content contains EDM-style `${...}` variables.
 fn warn_sn_variable_syntax(content: &str) {
     let re = Regex::new(r"\$\{[^}]+\}").unwrap();
     if re.is_match(content) {
         eprintln!(
-            "Warning: SureNotify API uses {{{{variable}}}} variable syntax. \
+            "Warning: Surenotify API uses {{{{variable}}}} variable syntax. \
              Detected ${{{{...}}}} format (EDM syntax)."
         );
     }

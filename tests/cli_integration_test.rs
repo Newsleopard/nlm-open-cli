@@ -38,7 +38,7 @@ fn help_top_level() {
     nl().arg("--help")
         .assert()
         .success()
-        .stdout(predicate::str::contains("NewsLeopard EDM & SureNotify CLI"));
+        .stdout(predicate::str::contains("Newsleopard EDM & Surenotify CLI"));
 }
 
 #[test]
@@ -54,7 +54,7 @@ fn help_sn() {
     nl().args(["sn", "--help"])
         .assert()
         .success()
-        .stdout(predicate::str::contains("SureNotify API commands"));
+        .stdout(predicate::str::contains("Surenotify API commands"));
 }
 
 #[test]
@@ -95,7 +95,7 @@ fn version_output() {
     nl().arg("--version")
         .assert()
         .success()
-        .stdout(predicate::str::contains("0.1.0"));
+        .stdout(predicate::str::contains(env!("CARGO_PKG_VERSION")));
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -263,7 +263,7 @@ fn missing_sn_api_key_email_send() {
     .code(3)
     .stderr(
         predicate::str::contains("Authentication error").and(predicate::str::contains(
-            "SureNotify API key not configured",
+            "Surenotify API key not configured",
         )),
     );
 }
@@ -376,7 +376,7 @@ fn dry_run_edm_report_list() {
 
 #[test]
 fn edm_campaign_wrong_variable_syntax_warning() {
-    // Using SureNotify-style {{name}} in an EDM campaign should trigger a warning.
+    // Using Surenotify-style {{name}} in an EDM campaign should trigger a warning.
     nl().args([
         "edm",
         "campaign",
@@ -407,7 +407,7 @@ fn edm_campaign_wrong_variable_syntax_warning() {
 
 #[test]
 fn sn_email_wrong_variable_syntax_warning() {
-    // Using EDM-style ${NAME} in a SureNotify email should trigger a warning.
+    // Using EDM-style ${NAME} in a Surenotify email should trigger a warning.
     nl().args([
         "sn",
         "email",
@@ -427,7 +427,7 @@ fn sn_email_wrong_variable_syntax_warning() {
     .success()
     .stderr(
         predicate::str::contains("Warning").and(predicate::str::contains(
-            "SureNotify API uses {{variable}} variable syntax",
+            "Surenotify API uses {{variable}} variable syntax",
         )),
     );
 }
@@ -643,7 +643,7 @@ fn dry_run_masks_key_showing_last_three() {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-// Additional coverage: SureNotify subcommands dry-run
+// Additional coverage: Surenotify subcommands dry-run
 // ══════════════════════════════════════════════════════════════════════════════
 
 #[test]

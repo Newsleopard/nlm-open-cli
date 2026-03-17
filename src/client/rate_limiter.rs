@@ -16,7 +16,7 @@ use std::num::NonZeroU32;
 pub type GovLimiter = GovernorLimiter<NotKeyed, InMemoryState, DefaultClock, NoOpMiddleware>;
 
 /// A thin wrapper around `governor::RateLimiter` with factory methods for
-/// the two rate-limit tiers used by the NewsLeopard EDM API.
+/// the two rate-limit tiers used by the Newsleopard EDM API.
 pub struct NlRateLimiter {
     limiter: GovLimiter,
 }

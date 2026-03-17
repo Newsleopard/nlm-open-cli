@@ -7,7 +7,7 @@ schedule:
   type: 1
 sender:
   email: no-reply@newsleopard.com
-  name: NewsLeopard
+  name: Newsleopard
 tracking:
   clicks: true
   opens: true

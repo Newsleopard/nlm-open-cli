@@ -64,11 +64,11 @@ impl ResolvedConfig {
         })
     }
 
-    /// Returns the SureNotify API key, or an `Auth` error if not configured.
+    /// Returns the Surenotify API key, or an `Auth` error if not configured.
     pub fn sn_api_key(&self) -> Result<&str, NlError> {
         self.sn_api_key.as_deref().ok_or_else(|| {
             NlError::Auth(
-                "SureNotify API key not configured. Run `nl config init` or set NL_SN_API_KEY."
+                "Surenotify API key not configured. Run `nl config init` or set NL_SN_API_KEY."
                     .to_string(),
             )
         })
@@ -220,7 +220,7 @@ pub fn init_interactive() -> Result<(), NlError> {
         .map_err(|e| NlError::Io(std::io::Error::other(e)))?;
 
     let sn_key: String = Input::new()
-        .with_prompt("SureNotify API Key (leave blank to skip)")
+        .with_prompt("Surenotify API Key (leave blank to skip)")
         .allow_empty(true)
         .interact_text()
         .map_err(|e| NlError::Io(std::io::Error::other(e)))?;

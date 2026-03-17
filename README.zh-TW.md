@@ -2,7 +2,7 @@
 
 **繁體中文** | [English](README.md)
 
-**一個 CLI 搞定 Newsleopard EDM 與 SureNotify API — 為開發者與 AI Agent 打造。**
+**一個 CLI 搞定 Newsleopard EDM 與 Surenotify API — 為開發者與 AI Agent 打造。**
 
 透過單一命令列工具管理電子報活動、交易型訊息、聯絡人、範本與報告。結構化 JSON 輸出、內建限流、Dry-run 安全預覽。
 
@@ -32,7 +32,7 @@
 ## 前置需求
 
 - [Rust](https://rustup.rs/) 1.75+（從原始碼編譯時需要）或直接下載預編譯執行檔
-- 一個 [Newsleopard（電子豹）](https://www.newsleopard.com/) 帳戶，並取得 EDM 或 SureNotify API Key
+- 一個 [Newsleopard（電子豹）](https://www.newsleopard.com/) 帳戶，並取得 EDM 或 Surenotify API Key
 
 ## 安裝
 
@@ -151,7 +151,7 @@ sn_api_key = "staging-sn-key"
 | 變數 | 用途 |
 |------|------|
 | `NL_EDM_API_KEY` | EDM API Key |
-| `NL_SN_API_KEY` | SureNotify API Key |
+| `NL_SN_API_KEY` | Surenotify API Key |
 | `NL_PROFILE` | 啟用的 Profile 名稱（預設：`default`） |
 | `NL_FORMAT` | 預設輸出格式（預設：`json`） |
 
@@ -221,12 +221,12 @@ nl edm campaign submit --name "三月電子報" --dry-run
 
 ## 變數語法
 
-EDM 與 SureNotify 使用**不同的變數語法**，混用會導致變數替換靜默失敗。
+EDM 與 Surenotify 使用**不同的變數語法**，混用會導致變數替換靜默失敗。
 
 | API | 語法 | 範例 | 適用指令 |
 |-----|------|------|----------|
 | EDM | `${FIELD_NAME}` | `${NAME}`、`${ORDER_ID}` | `nl edm campaign`、`nl edm ab-test`、`nl edm automation` |
-| SureNotify | `{{variable_name}}` | `{{name}}`、`{{order_id}}` | `nl sn email`、`nl sn sms` |
+| Surenotify | `{{variable_name}}` | `{{name}}`、`{{order_id}}` | `nl sn email`、`nl sn sms` |
 
 > CLI 會偵測並警告跨用情況（例如 EDM 內容中出現 `{{...}}`）。
 

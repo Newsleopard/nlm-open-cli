@@ -2,7 +2,7 @@
 
 **[繁體中文](README.zh-TW.md)** | English
 
-**One CLI for Newsleopard EDM and SureNotify APIs — built for developers and AI agents.**
+**One CLI for Newsleopard EDM and Surenotify APIs — built for developers and AI agents.**
 
 Manage email campaigns, transactional messages, contacts, templates, and reports from a single command-line tool. Structured JSON output. Built-in rate limiting. Dry-run safety.
 
@@ -32,7 +32,7 @@ Manage email campaigns, transactional messages, contacts, templates, and reports
 ## Prerequisites
 
 - [Rust](https://rustup.rs/) 1.75+ (for building from source) or download a pre-built binary
-- A [Newsleopard](https://www.newsleopard.com/) account with an EDM or SureNotify API key
+- A [Newsleopard](https://www.newsleopard.com/) account with an EDM or Surenotify API key
 
 ## Installation
 
@@ -152,7 +152,7 @@ sn_api_key = "staging-sn-key"
 | Variable | Purpose |
 |----------|---------|
 | `NL_EDM_API_KEY` | EDM API key |
-| `NL_SN_API_KEY` | SureNotify API key |
+| `NL_SN_API_KEY` | Surenotify API key |
 | `NL_PROFILE` | Active profile name (default: `default`) |
 | `NL_FORMAT` | Default output format (default: `json`) |
 | `NL_MCP_URL` | MCP server URL (default: `https://mcp.newsleopard.com`) |
@@ -223,12 +223,12 @@ nl edm campaign submit --name "March Newsletter" --dry-run
 
 ## Variable Syntax
 
-EDM and SureNotify use **different variable syntaxes**. Mixing them causes silent substitution failures.
+EDM and Surenotify use **different variable syntaxes**. Mixing them causes silent substitution failures.
 
 | API | Syntax | Example | Used in |
 |-----|--------|---------|---------|
 | EDM | `${FIELD_NAME}` | `${NAME}`, `${ORDER_ID}` | `nl edm campaign`, `nl edm ab-test`, `nl edm automation` |
-| SureNotify | `{{variable_name}}` | `{{name}}`, `{{order_id}}` | `nl sn email`, `nl sn sms` |
+| Surenotify | `{{variable_name}}` | `{{name}}`, `{{order_id}}` | `nl sn email`, `nl sn sms` |
 
 > The CLI detects and warns on cross-use (e.g., `{{...}}` in EDM content).
 

@@ -4,23 +4,23 @@
 
 ### 1.1 產品定義
 
-`nl` 是一套 Rust 命令列工具，封裝 NewsLeopard 平台的兩組 API：
+`nl` 是一套 Rust 命令列工具，封裝 Newsleopard 平台的兩組 API：
 
 - **EDM API** (`api.newsleopard.com`) — 20 個 endpoints，涵蓋批量行銷活動管理
-- **SureNotify API** (`mail.surenotifyapi.com`) — 11+ 個 endpoints，涵蓋交易型 Email 與 SMS
+- **Surenotify API** (`mail.surenotifyapi.com`) — 11+ 個 endpoints，涵蓋交易型 Email 與 SMS
 
 ### 1.2 目標使用者
 
 | 角色 | 使用場景 |
 |------|---------|
-| **開發者** | 將 NewsLeopard 整合進 CI/CD pipeline、自動化腳本 |
+| **開發者** | 將 Newsleopard 整合進 CI/CD pipeline、自動化腳本 |
 | **DevOps / SRE** | 監控帳戶餘額、自動匯出報告、批次管理聯絡人 |
 | **行銷技術人員** | 快速發送測試活動、查詢活動指標、管理 Webhook |
 | **系統管理員** | 管理寄件域名驗證、設定多環境 Profile |
 
 ### 1.3 產品目標
 
-1. 提供 100% 的 EDM + SureNotify API 覆蓋，無需直接操作 HTTP
+1. 提供 100% 的 EDM + Surenotify API 覆蓋，無需直接操作 HTTP
 2. 降低整合門檻 — 從閱讀 API 文件到完成任務只需一行指令
 3. 支援自動化 — 所有輸出可被 `jq`、`awk` 等工具 pipe 處理
 4. 跨平台 — 支援 5 個編譯目標，單一靜態執行檔
@@ -88,7 +88,7 @@
 |---|------|------|----------|---------|
 | — | 查詢餘額 | `GET` | `/v1/balance` | `nl edm account balance` |
 
-### 2.2 SureNotify API（11+ Endpoints）
+### 2.2 Surenotify API（11+ Endpoints）
 
 #### Email（2 Endpoints）
 
@@ -277,12 +277,12 @@ NL_PROFILE=staging nl edm account balance
 #### FR-01: 完整 API 覆蓋
 
 - 所有 20 個 EDM API endpoints 必須有對應的 CLI 指令
-- 所有 11+ 個 SureNotify API endpoints 必須有對應的 CLI 指令
+- 所有 11+ 個 Surenotify API endpoints 必須有對應的 CLI 指令
 - 每個 API endpoint 的所有 required 和 optional 參數必須可透過 CLI flags 傳入
 
 #### FR-02: 認證與設定
 
-- 支援 `x-api-key` header 認證（EDM 和 SureNotify 各自獨立的 API Key）
+- 支援 `x-api-key` header 認證（EDM 和 Surenotify 各自獨立的 API Key）
 - 設定檔使用 TOML 格式，位於 `~/.config/nl/config.toml`
 - 支援多 Profile（default、staging、production 等）
 - 環境變數覆蓋設定檔值（`NL_EDM_API_KEY`、`NL_SN_API_KEY`、`NL_PROFILE`、`NL_FORMAT`）
@@ -300,7 +300,7 @@ NL_PROFILE=staging nl edm account balance
 
 - 定義 6 個 exit codes（0-5），對應不同錯誤類型
 - 所有錯誤輸出 JSON 格式到 stderr
-- API 錯誤包含 HTTP status code、NewsLeopard error code、錯誤訊息
+- API 錯誤包含 HTTP status code、Newsleopard error code、錯誤訊息
 - 支援所有 EDM error codes（40001-40020）的解析
 
 #### FR-05: Rate Limiting
@@ -383,12 +383,12 @@ NL_PROFILE=staging nl edm account balance
 | API | 變數語法 | 範例 |
 |-----|---------|------|
 | EDM | `${FIELD_NAME}` | `${NAME}`、`${ORDER_ID}` |
-| SureNotify | `{{variable_name}}` | `{{name}}`、`{{order_id}}` |
+| Surenotify | `{{variable_name}}` | `{{name}}`、`{{order_id}}` |
 
 CLI 應在送出前檢查：
 
 - EDM 指令的 HTML/subject 中包含 `{{...}}` 時發出警告
-- SureNotify 指令的 HTML/subject/content 中包含 `${...}` 時發出警告
+- Surenotify 指令的 HTML/subject/content 中包含 `${...}` 時發出警告
 
 ---
 

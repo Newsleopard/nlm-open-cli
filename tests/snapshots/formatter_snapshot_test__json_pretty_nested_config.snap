@@ -9,7 +9,7 @@ expression: output
   },
   "sender": {
     "email": "no-reply@newsleopard.com",
-    "name": "NewsLeopard"
+    "name": "Newsleopard"
   },
   "tracking": {
     "clicks": true,

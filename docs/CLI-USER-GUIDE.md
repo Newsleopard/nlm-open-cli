@@ -23,8 +23,8 @@ nl config init
 ```
 
 互動式流程會提示你輸入：
-1. EDM API Key（從 NewsLeopard Dashboard → 設定 → API Key 取得）
-2. SureNotify API Key（從 SureNotify Dashboard → 設定 → API Key 取得）
+1. EDM API Key（從 Newsleopard Dashboard → 設定 → API Key 取得）
+2. Surenotify API Key（從 Surenotify Dashboard → 設定 → API Key 取得）
 3. 預設輸出格式（json / table / yaml / csv）
 
 設定檔將寫入 `~/.config/nl/config.toml`。
@@ -67,7 +67,7 @@ nl config profile delete staging
 | 變數 | 說明 | 對應 flag |
 |------|------|---------|
 | `NL_EDM_API_KEY` | EDM API Key | — |
-| `NL_SN_API_KEY` | SureNotify API Key | — |
+| `NL_SN_API_KEY` | Surenotify API Key | — |
 | `NL_PROFILE` | 使用的 Profile 名稱 | `--profile` |
 | `NL_FORMAT` | 預設輸出格式 | `--format` |
 
@@ -629,7 +629,7 @@ nl edm automation trigger \
 
 ---
 
-## 4. SureNotify API 指令
+## 4. Surenotify API 指令
 
 ### 4.1 Email（`nl sn email`）
 
@@ -670,7 +670,7 @@ nl sn email send \
   --unsubscribe-link "https://example.com/unsubscribe"
 ```
 
-**注意：** SureNotify 變數語法為 `{{variable}}`，不同於 EDM 的 `${FIELD}`。
+**注意：** Surenotify 變數語法為 `{{variable}}`，不同於 EDM 的 `${FIELD}`。
 
 **收件者上限：** 100 人/次
 
@@ -1061,7 +1061,7 @@ nl edm campaign submit ...
 
 # 變數語法混用
 nl edm campaign submit --html "<p>Hi {{name}}</p>" ...
-# → Warning: EDM API 使用 ${FIELD} 變數語法，偵測到 {{...}} 格式（SureNotify 語法）
+# → Warning: EDM API 使用 ${FIELD} 變數語法，偵測到 {{...}} 格式（Surenotify 語法）
 ```
 
 ---
@@ -1136,7 +1136,7 @@ nl edm contacts list-groups --page-all --format csv > groups.csv
 | API | 語法 | 範例 | CLI 指令群 |
 |-----|------|------|-----------|
 | EDM | `${FIELD_NAME}` | `${NAME}`, `${ORDER_ID}` | `nl edm campaign`, `nl edm ab-test` |
-| SureNotify | `{{variable_name}}` | `{{name}}`, `{{order_id}}` | `nl sn email`, `nl sn sms` |
+| Surenotify | `{{variable_name}}` | `{{name}}`, `{{order_id}}` | `nl sn email`, `nl sn sms` |
 
 **注意：** 混用變數語法會導致變數無法替換。CLI 會在送出前檢查並發出警告。
 

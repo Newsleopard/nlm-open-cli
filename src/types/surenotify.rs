@@ -1,9 +1,9 @@
-//! SureNotify API request/response types.
+//! Surenotify API request/response types.
 //!
-//! Covers all 14 SureNotify endpoints: email (2), SMS (3), email webhook (3),
+//! Covers all 14 Surenotify endpoints: email (2), SMS (3), email webhook (3),
 //! SMS webhook (3), domain verification (3).
 //!
-//! SureNotify uses `{{variable_name}}` template syntax (distinct from EDM's `${FIELD_NAME}`).
+//! Surenotify uses `{{variable_name}}` template syntax (distinct from EDM's `${FIELD_NAME}`).
 
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -253,7 +253,7 @@ pub type DomainVerifyResponse = Vec<DnsRecord>;
 
 // ─── Error Parsing ──────────────────────────────────────────────────────────
 
-/// Standard error body returned by the SureNotify API.
+/// Standard error body returned by the Surenotify API.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SnApiErrorResponse {
     #[serde(rename = "errorCode", default)]

@@ -1,6 +1,6 @@
 //! MCP (Model Context Protocol) client for composite/smart tool invocations.
 //!
-//! Communicates with the NewsLeopard MCP server over JSON-RPC 2.0 / HTTPS.
+//! Communicates with the Newsleopard MCP server over JSON-RPC 2.0 / HTTPS.
 //! Used by both `nl mcp call` (generic passthrough) and named subcommand aliases
 //! (e.g. `nl edm campaign analyze`).
 

@@ -3,18 +3,18 @@
 
 use serde_json::Value;
 
-use crate::client::surenotify::SureNotifyClient;
+use crate::client::surenotify::SurenotifyClient;
 use crate::error::NlError;
 
 /// Execute the domain-setup workflow:
 ///
-/// 1. Create domain verification records via SureNotify API
+/// 1. Create domain verification records via Surenotify API
 /// 2. Display the DNS records that need to be configured
 /// 3. Optionally wait and then trigger automatic verification
 pub async fn execute(
     domain: &str,
     auto_verify_after: Option<u64>,
-    sn_client: &SureNotifyClient<'_>,
+    sn_client: &SurenotifyClient<'_>,
 ) -> Result<Value, NlError> {
     // 1. Create domain
     let dns_records = sn_client.create_domain(domain).await?;

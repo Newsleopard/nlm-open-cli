@@ -11,7 +11,7 @@ expression: output
 ├───────────────────────┼──────────────────────────┤
 │ sender.email          │ no-reply@newsleopard.com │
 ├───────────────────────┼──────────────────────────┤
-│ sender.name           │ NewsLeopard              │
+│ sender.name           │ Newsleopard              │
 ├───────────────────────┼──────────────────────────┤
 │ tracking.clicks       │ true                     │
 ├───────────────────────┼──────────────────────────┤

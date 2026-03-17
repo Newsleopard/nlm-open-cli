@@ -1,7 +1,7 @@
-//! Integration tests for the SureNotify API client using wiremock.
+//! Integration tests for the Surenotify API client using wiremock.
 //!
 //! Each test starts a local mock server, configures expected requests,
-//! creates a `SureNotifyClient` pointing at the mock, and verifies both
+//! creates a `SurenotifyClient` pointing at the mock, and verifies both
 //! the request shape and the parsed response.
 
 use std::collections::HashMap;
@@ -10,7 +10,7 @@ use serde_json::json;
 use wiremock::matchers::{body_json, header, method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
-use nl_cli::client::surenotify::SureNotifyClient;
+use nl_cli::client::surenotify::SurenotifyClient;
 use nl_cli::client::ApiClient;
 use nl_cli::error::NlError;
 use nl_cli::types::surenotify::*;
@@ -44,7 +44,7 @@ async fn test_send_email() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
     let request = EmailSendRequest {
         subject: "Order Confirmation".into(),
         from_address: "noreply@example.com".into(),
@@ -85,7 +85,7 @@ async fn test_send_email_with_failures() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
     let request = EmailSendRequest {
         subject: "Test".into(),
         from_address: "test@example.com".into(),
@@ -135,7 +135,7 @@ async fn test_email_events() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
     let params = EmailEventsParams {
         id: Some("MSG001".into()),
         status: Some("delivered".into()),
@@ -171,7 +171,7 @@ async fn test_send_sms() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
     let request = SmsSendRequest {
         content: "Your verification code is {{code}}".into(),
         recipients: vec![SmsRecipient {
@@ -213,7 +213,7 @@ async fn test_sms_events() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
     let params = SmsEventsParams {
         country_code: Some("886".into()),
         status: Some("delivered".into()),
@@ -247,7 +247,7 @@ async fn test_exclusive_number() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
     let result = sn.exclusive_number().await;
 
     let value = result.expect("exclusive_number should succeed");
@@ -275,7 +275,7 @@ async fn test_create_webhook() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
     let request = WebhookRequest {
         event_type: 3,
         url: "https://example.com/webhook/delivery".into(),
@@ -305,7 +305,7 @@ async fn test_list_webhooks() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
     let result = sn.list_webhooks().await;
 
     let value = result.expect("list_webhooks should succeed");
@@ -328,7 +328,7 @@ async fn test_delete_webhook() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
     let result = sn.delete_webhook(5).await;
 
     // 204 is mapped to NlError::NoContent (exit code 0, success-like).
@@ -359,7 +359,7 @@ async fn test_create_sms_webhook() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
     let request = SmsWebhookRequest {
         event_type: 6,
         url: "https://example.com/sms/bounce".into(),
@@ -387,7 +387,7 @@ async fn test_list_sms_webhooks() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
     let result = sn.list_sms_webhooks().await;
 
     let value = result.expect("list_sms_webhooks should succeed");
@@ -410,7 +410,7 @@ async fn test_delete_sms_webhook() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
     let result = sn.delete_sms_webhook(3).await;
 
     match result.unwrap_err() {
@@ -446,7 +446,7 @@ async fn test_create_domain() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
     let result = sn.create_domain("mail.example.com").await;
 
     let value = result.expect("create_domain should succeed");
@@ -482,7 +482,7 @@ async fn test_verify_domain() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
     let result = sn.verify_domain("mail.example.com").await;
 
     let value = result.expect("verify_domain should succeed");
@@ -505,7 +505,7 @@ async fn test_remove_domain() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
     let result = sn.remove_domain("mail.example.com").await;
 
     match result.unwrap_err() {
@@ -531,7 +531,7 @@ async fn test_sn_error_handling_400() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
     let request = EmailSendRequest {
         subject: "Test".into(),
         from_address: "bad-format".into(),
@@ -572,7 +572,7 @@ async fn test_sn_server_error_500() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
     let result = sn.exclusive_number().await;
 
     match result.unwrap_err() {
@@ -606,7 +606,7 @@ async fn test_sn_api_key_header_sent() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, "unique-sn-key-xyz", &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, "unique-sn-key-xyz", &server.uri());
     let result = sn.list_webhooks().await;
 
     result.expect("Should succeed when correct API key is sent");
@@ -629,7 +629,7 @@ async fn test_email_events_no_filters() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
     let params = EmailEventsParams::default();
     let result = sn.email_events(&params).await;
 
@@ -658,7 +658,7 @@ async fn test_send_sms_with_from_number() {
         .mount(&server)
         .await;
 
-    let sn = SureNotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
+    let sn = SurenotifyClient::new_with_base_url(&api_client, TEST_API_KEY, &server.uri());
     let request = SmsSendRequest {
         content: "Hello from exclusive number".into(),
         recipients: vec![SmsRecipient {

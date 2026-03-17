@@ -1,10 +1,10 @@
-//! SureNotify API client — 14 endpoint methods covering email, SMS,
+//! Surenotify API client — 14 endpoint methods covering email, SMS,
 //! email webhook, SMS webhook, and domain verification.
 //!
 //! All methods return `Result<serde_json::Value, NlError>` so the executor can
 //! pass the result directly to the formatter layer.
 //!
-//! SureNotify has **no rate limiter** per the spec (unlike the EDM API).
+//! Surenotify has **no rate limiter** per the spec (unlike the EDM API).
 
 use std::time::Instant;
 
@@ -14,18 +14,18 @@ use crate::client::{parse_api_response, retry::with_retry, ApiClient};
 use crate::error::NlError;
 use crate::types::surenotify::*;
 
-/// Client for the SureNotify API (`mail.surenotifyapi.com`).
+/// Client for the Surenotify API (`mail.surenotifyapi.com`).
 ///
 /// Borrows the shared `ApiClient` for HTTP transport and dry-run / verbose
-/// behaviour. SureNotify does not use a rate limiter.
-pub struct SureNotifyClient<'a> {
+/// behaviour. Surenotify does not use a rate limiter.
+pub struct SurenotifyClient<'a> {
     client: &'a ApiClient,
     api_key: String,
     base_url: String,
 }
 
-impl<'a> SureNotifyClient<'a> {
-    /// Creates a new `SureNotifyClient` pointing at the production SureNotify API.
+impl<'a> SurenotifyClient<'a> {
+    /// Creates a new `SurenotifyClient` pointing at the production Surenotify API.
     pub fn new(client: &'a ApiClient, api_key: &str) -> Self {
         Self {
             client,
@@ -34,7 +34,7 @@ impl<'a> SureNotifyClient<'a> {
         }
     }
 
-    /// Creates a new `SureNotifyClient` with a custom base URL (for wiremock tests).
+    /// Creates a new `SurenotifyClient` with a custom base URL (for wiremock tests).
     pub fn new_with_base_url(client: &'a ApiClient, api_key: &str, base_url: &str) -> Self {
         Self {
             client,
@@ -562,7 +562,7 @@ mod tests {
     #[tokio::test]
     async fn test_dry_run_send_email() {
         let api_client = ApiClient::new(true, 0);
-        let sn = SureNotifyClient::new(&api_client, "sn-test-key-123");
+        let sn = SurenotifyClient::new(&api_client, "sn-test-key-123");
         let request = EmailSendRequest {
             subject: "Test".into(),
             from_address: "test@example.com".into(),
@@ -592,7 +592,7 @@ mod tests {
     #[tokio::test]
     async fn test_dry_run_send_sms() {
         let api_client = ApiClient::new(true, 0);
-        let sn = SureNotifyClient::new(&api_client, "sn-key");
+        let sn = SurenotifyClient::new(&api_client, "sn-key");
         let request = SmsSendRequest {
             content: "Code: {{code}}".into(),
             recipients: vec![SmsRecipient {
@@ -619,7 +619,7 @@ mod tests {
     #[tokio::test]
     async fn test_dry_run_email_events() {
         let api_client = ApiClient::new(true, 0);
-        let sn = SureNotifyClient::new(&api_client, "sn-key");
+        let sn = SurenotifyClient::new(&api_client, "sn-key");
         let params = EmailEventsParams {
             id: Some("MSG001".into()),
             ..Default::default()
@@ -640,7 +640,7 @@ mod tests {
     #[tokio::test]
     async fn test_dry_run_exclusive_number() {
         let api_client = ApiClient::new(true, 0);
-        let sn = SureNotifyClient::new(&api_client, "sn-key");
+        let sn = SurenotifyClient::new(&api_client, "sn-key");
         let result = sn.exclusive_number().await;
         assert!(result.is_err());
         match result.unwrap_err() {
@@ -655,7 +655,7 @@ mod tests {
     #[tokio::test]
     async fn test_dry_run_create_webhook() {
         let api_client = ApiClient::new(true, 0);
-        let sn = SureNotifyClient::new(&api_client, "sn-key");
+        let sn = SurenotifyClient::new(&api_client, "sn-key");
         let request = WebhookRequest {
             event_type: 3,
             url: "https://example.com/webhook".into(),
@@ -676,7 +676,7 @@ mod tests {
     #[tokio::test]
     async fn test_dry_run_delete_webhook() {
         let api_client = ApiClient::new(true, 0);
-        let sn = SureNotifyClient::new(&api_client, "sn-key");
+        let sn = SurenotifyClient::new(&api_client, "sn-key");
         let result = sn.delete_webhook(5).await;
         assert!(result.is_err());
         match result.unwrap_err() {
@@ -692,7 +692,7 @@ mod tests {
     #[tokio::test]
     async fn test_dry_run_list_webhooks() {
         let api_client = ApiClient::new(true, 0);
-        let sn = SureNotifyClient::new(&api_client, "sn-key");
+        let sn = SurenotifyClient::new(&api_client, "sn-key");
         let result = sn.list_webhooks().await;
         assert!(result.is_err());
         match result.unwrap_err() {
@@ -707,7 +707,7 @@ mod tests {
     #[tokio::test]
     async fn test_dry_run_create_sms_webhook() {
         let api_client = ApiClient::new(true, 0);
-        let sn = SureNotifyClient::new(&api_client, "sn-key");
+        let sn = SurenotifyClient::new(&api_client, "sn-key");
         let request = SmsWebhookRequest {
             event_type: 6,
             url: "https://example.com/sms/bounce".into(),
@@ -728,7 +728,7 @@ mod tests {
     #[tokio::test]
     async fn test_dry_run_create_domain() {
         let api_client = ApiClient::new(true, 0);
-        let sn = SureNotifyClient::new(&api_client, "sn-key");
+        let sn = SurenotifyClient::new(&api_client, "sn-key");
         let result = sn.create_domain("mail.example.com").await;
         assert!(result.is_err());
         match result.unwrap_err() {
@@ -743,7 +743,7 @@ mod tests {
     #[tokio::test]
     async fn test_dry_run_verify_domain() {
         let api_client = ApiClient::new(true, 0);
-        let sn = SureNotifyClient::new(&api_client, "sn-key");
+        let sn = SurenotifyClient::new(&api_client, "sn-key");
         let result = sn.verify_domain("mail.example.com").await;
         assert!(result.is_err());
         match result.unwrap_err() {
@@ -758,7 +758,7 @@ mod tests {
     #[tokio::test]
     async fn test_dry_run_remove_domain() {
         let api_client = ApiClient::new(true, 0);
-        let sn = SureNotifyClient::new(&api_client, "sn-key");
+        let sn = SurenotifyClient::new(&api_client, "sn-key");
         let result = sn.remove_domain("mail.example.com").await;
         assert!(result.is_err());
         match result.unwrap_err() {
@@ -773,7 +773,7 @@ mod tests {
     #[tokio::test]
     async fn test_dry_run_sms_events() {
         let api_client = ApiClient::new(true, 0);
-        let sn = SureNotifyClient::new(&api_client, "sn-key");
+        let sn = SurenotifyClient::new(&api_client, "sn-key");
         let params = SmsEventsParams {
             country_code: Some("886".into()),
             page: Some(1),
@@ -794,7 +794,7 @@ mod tests {
     #[tokio::test]
     async fn test_dry_run_list_sms_webhooks() {
         let api_client = ApiClient::new(true, 0);
-        let sn = SureNotifyClient::new(&api_client, "sn-key");
+        let sn = SurenotifyClient::new(&api_client, "sn-key");
         let result = sn.list_sms_webhooks().await;
         assert!(result.is_err());
         match result.unwrap_err() {
@@ -809,7 +809,7 @@ mod tests {
     #[tokio::test]
     async fn test_dry_run_delete_sms_webhook() {
         let api_client = ApiClient::new(true, 0);
-        let sn = SureNotifyClient::new(&api_client, "sn-key");
+        let sn = SurenotifyClient::new(&api_client, "sn-key");
         let result = sn.delete_sms_webhook(3).await;
         assert!(result.is_err());
         match result.unwrap_err() {

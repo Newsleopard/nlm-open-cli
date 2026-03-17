@@ -16,7 +16,7 @@ use crate::client::{parse_api_response, ApiClient};
 use crate::error::NlError;
 use crate::types::edm::*;
 
-/// Client for the NewsLeopard EDM API (`api.newsleopard.com`).
+/// Client for the Newsleopard EDM API (`api.newsleopard.com`).
 ///
 /// Borrows the shared `ApiClient` for HTTP transport, rate limiting, and
 /// dry-run / verbose behaviour.

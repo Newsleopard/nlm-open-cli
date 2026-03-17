@@ -1,7 +1,7 @@
-//! HTTP client layer: shared infrastructure, EDM client, SureNotify client.
+//! HTTP client layer: shared infrastructure, EDM client, Surenotify client.
 //!
 //! `ApiClient` holds the reqwest HTTP client, rate limiters, and global flags
-//! (dry-run, verbose). The protocol-specific clients (`EdmClient`, `SureNotifyClient`)
+//! (dry-run, verbose). The protocol-specific clients (`EdmClient`, `SurenotifyClient`)
 //! borrow the `ApiClient` and add endpoint methods.
 
 pub mod edm;
@@ -19,7 +19,7 @@ use rate_limiter::NlRateLimiter;
 
 /// Shared HTTP client with rate limiters and global flags.
 ///
-/// Created once per CLI invocation and borrowed by `EdmClient` / `SureNotifyClient`.
+/// Created once per CLI invocation and borrowed by `EdmClient` / `SurenotifyClient`.
 pub struct ApiClient {
     /// The underlying reqwest HTTP client (rustls, no OpenSSL).
     pub(crate) http: Client,

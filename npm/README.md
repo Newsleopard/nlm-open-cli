@@ -1,6 +1,6 @@
 # @newsleopard/nl-cli
 
-CLI for [Newsleopard](https://www.newsleopard.com/) EDM API and SureNotify transactional messaging.
+CLI for [Newsleopard](https://www.newsleopard.com/) EDM API and Surenotify transactional messaging.
 
 This npm package downloads the pre-built `nl` binary for your platform from [GitHub Releases](https://github.com/Newsleopard/nlm-open-cli/releases).
 

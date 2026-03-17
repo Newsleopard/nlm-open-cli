@@ -62,7 +62,7 @@ fn contact_list() -> serde_json::Value {
 fn nested_config() -> serde_json::Value {
     json!({
         "sender": {
-            "name": "NewsLeopard",
+            "name": "Newsleopard",
             "email": "no-reply@newsleopard.com"
         },
         "tracking": {

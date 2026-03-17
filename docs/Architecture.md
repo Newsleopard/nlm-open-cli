@@ -2,7 +2,7 @@
 
 ## 1. 架構總覽
 
-`nl` CLI 採用分層架構，借鑑 Google Workspace CLI (`gws`) 的設計模式，針對 NewsLeopard 已知且固定的 API 面（31 endpoints）做靜態化調整。
+`nl` CLI 採用分層架構，借鑑 Google Workspace CLI (`gws`) 的設計模式，針對 Newsleopard 已知且固定的 API 面（31 endpoints）做靜態化調整。
 
 ```
 ┌──────────────────────────────────────────────────────────┐
@@ -78,7 +78,7 @@ nl-cli/
 │   ├── client/
 │   │   ├── mod.rs                 # ApiClient struct (shared HTTP, rate limiter, dry-run)
 │   │   ├── edm.rs                 # EdmClient — 20 endpoint methods
-│   │   ├── surenotify.rs          # SureNotifyClient — 11+ endpoint methods
+│   │   ├── surenotify.rs          # SurenotifyClient — 11+ endpoint methods
 │   │   ├── rate_limiter.rs        # Token bucket (2 req/sec EDM, 1 req/10s report export)
 │   │   └── retry.rs               # Exponential backoff for 429/5xx
 │   ├── config/
@@ -120,7 +120,7 @@ nl-cli/
 name = "nl-cli"
 version = "0.1.0"
 edition = "2021"
-description = "NewsLeopard EDM & SureNotify CLI"
+description = "Newsleopard EDM & Surenotify CLI"
 rust-version = "1.75"
 
 [[bin]]
@@ -194,7 +194,7 @@ strip = true
 ```rust
 /// 頂層 CLI 結構
 #[derive(Parser)]
-#[command(name = "nl", about = "NewsLeopard EDM & SureNotify CLI")]
+#[command(name = "nl", about = "Newsleopard EDM & Surenotify CLI")]
 pub struct NlCli {
     #[command(subcommand)]
     pub command: Command,
@@ -224,7 +224,7 @@ pub struct NlCli {
 pub enum Command {
     /// EDM API 指令
     Edm(EdmCommand),
-    /// SureNotify API 指令
+    /// Surenotify API 指令
     Sn(SnCommand),
     /// 設定管理
     Config(ConfigCommand),
@@ -277,7 +277,7 @@ pub struct Profile {
 
 ```
 1. 提示輸入 EDM API Key（可選跳過）
-2. 提示輸入 SureNotify API Key（可選跳過）
+2. 提示輸入 Surenotify API Key（可選跳過）
 3. 選擇預設輸出格式（json/table/yaml/csv）
 4. 寫入 ~/.config/nl/config.toml（權限 600）
 ```
@@ -299,7 +299,7 @@ pub struct EdmClient<'a> {
     base_url: String,   // https://api.newsleopard.com
 }
 
-pub struct SureNotifyClient<'a> {
+pub struct SurenotifyClient<'a> {
     client: &'a ApiClient,
     api_key: String,
     base_url: String,   // https://mail.surenotifyapi.com
@@ -529,13 +529,13 @@ pub async fn execute(cli: NlCli) -> Result<(), NlError> {
             execute_edm(edm, &edm_client).await?
         }
         Command::Sn(sn) => {
-            let sn_client = SureNotifyClient::new(&client, &config.sn_api_key()?);
+            let sn_client = SurenotifyClient::new(&client, &config.sn_api_key()?);
             execute_sn(sn, &sn_client).await?
         }
         Command::Config(cfg) => execute_config(cfg).await?,
         Command::Helper(helper) => {
             let edm_client = EdmClient::new(&client, &config.edm_api_key()?);
-            let sn_client = SureNotifyClient::new(&client, &config.sn_api_key()?);
+            let sn_client = SurenotifyClient::new(&client, &config.sn_api_key()?);
             execute_helper(helper, &edm_client, &sn_client).await?
         }
     };
@@ -745,7 +745,7 @@ pub struct CampaignMetrics {
 }
 ```
 
-### 5.2 SureNotify Types
+### 5.2 Surenotify Types
 
 ```rust
 // === Email ===
@@ -823,25 +823,25 @@ pub struct DnsRecord {
 ### 5.3 變數語法驗證
 
 ```rust
-/// 檢查 EDM 內容是否誤用 SureNotify 變數語法
+/// 檢查 EDM 內容是否誤用 Surenotify 變數語法
 pub fn validate_edm_variables(content: &str) -> Vec<String> {
     let mut warnings = Vec::new();
     let sn_pattern = regex::Regex::new(r"\{\{[^}]+\}\}").unwrap();
     if sn_pattern.is_match(content) {
         warnings.push(
-            "EDM API 使用 ${FIELD} 變數語法，偵測到 {{...}} 格式（SureNotify 語法）".to_string()
+            "EDM API 使用 ${FIELD} 變數語法，偵測到 {{...}} 格式（Surenotify 語法）".to_string()
         );
     }
     warnings
 }
 
-/// 檢查 SureNotify 內容是否誤用 EDM 變數語法
+/// 檢查 Surenotify 內容是否誤用 EDM 變數語法
 pub fn validate_sn_variables(content: &str) -> Vec<String> {
     let mut warnings = Vec::new();
     let edm_pattern = regex::Regex::new(r"\$\{[^}]+\}").unwrap();
     if edm_pattern.is_match(content) {
         warnings.push(
-            "SureNotify API 使用 {{variable}} 變數語法，偵測到 ${...} 格式（EDM 語法）".to_string()
+            "Surenotify API 使用 {{variable}} 變數語法，偵測到 ${...} 格式（EDM 語法）".to_string()
         );
     }
     warnings
@@ -991,7 +991,7 @@ jobs:
 10. `cli/edm/*.rs` — 子指令 args
 11. `executor/mod.rs` — EDM 指令分發
 
-### Phase 3: SureNotify API
+### Phase 3: Surenotify API
 
 12. `types/surenotify.rs` — 所有 SN types
 13. `client/surenotify.rs` — 11+ endpoint methods

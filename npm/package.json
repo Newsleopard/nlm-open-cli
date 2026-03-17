@@ -1,7 +1,7 @@
 {
   "name": "@newsleopard/nl-cli",
-  "version": "0.1.1",
-  "description": "CLI for NewsLeopard EDM API and SureNotify transactional messaging",
+  "version": "0.1.2",
+  "description": "CLI for Newsleopard EDM API and Surenotify transactional messaging",
   "license": "(MIT OR Apache-2.0)",
   "repository": {
     "type": "git",

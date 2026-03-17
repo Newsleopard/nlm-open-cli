@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-`nl` is a Rust CLI tool wrapping the NewsLeopard EDM API (20 endpoints) and SureNotify API (14 endpoints) for email marketing and transactional messaging. Binary name: `nl`, crate name: `nl-cli`.
+`nl` is a Rust CLI tool wrapping the Newsleopard EDM API (20 endpoints) and Surenotify API (14 endpoints) for email marketing and transactional messaging. Binary name: `nl`, crate name: `nl-cli`.
 
 **Status:** Implemented — all modules complete and compiling. Architecture docs and PRD in `docs/`.
 
@@ -38,7 +38,7 @@ main.rs → cli/ (clap derive) → executor/ → client/ + formatter/ + helpers/
 
 - **`cli/`** — Command tree via clap derive. Four subtrees: `edm/` (contacts, campaign, ab_test, report, template, automation, account), `sn/` (email, sms, webhook, sms_webhook, domain), `mcp` (tools, call), `config` (init, set, get, list, profile). Also `helper`/`x` for orchestration workflows
 - **`executor/`** — Routes parsed CLI args → client calls → formatted output
-- **`client/`** — `ApiClient` (shared HTTP + rate limiter + dry-run), `EdmClient` (20 methods), `SureNotifyClient` (14 methods), `McpClient` (JSON-RPC 2.0 tool discovery/invocation via `mcp.rs`), `rate_limiter.rs` (governor token bucket), `retry.rs` (backoff)
+- **`client/`** — `ApiClient` (shared HTTP + rate limiter + dry-run), `EdmClient` (20 methods), `SurenotifyClient` (14 methods), `McpClient` (JSON-RPC 2.0 tool discovery/invocation via `mcp.rs`), `rate_limiter.rs` (governor token bucket), `retry.rs` (backoff)
 - **`formatter/`** — 4 output formats: JSON (pretty/compact/NDJSON), Table (tabled + auto-flatten), YAML, CSV
 - **`helpers/`** — Orchestration workflows: `campaign_send`, `import_wait`, `report_export`, `domain_setup`
 - **`config/`** — TOML config at `~/.config/nl/config.toml`, multi-profile, env var overrides (`NL_EDM_API_KEY`, `NL_SN_API_KEY`, `NL_FORMAT`, `NL_MCP_URL`)
@@ -50,7 +50,7 @@ main.rs → cli/ (clap derive) → executor/ → client/ + formatter/ + helpers/
 | API | Base URL | Auth | Rate Limit | Variable Syntax |
 |-----|----------|------|------------|-----------------|
 | EDM | `api.newsleopard.com` | `x-api-key` header | 2 req/s general, 1 req/10s report export | `${FIELD_NAME}` |
-| SureNotify | `mail.surenotifyapi.com` | `x-api-key` header | — | `{{variable_name}}` |
+| Surenotify | `mail.surenotifyapi.com` | `x-api-key` header | — | `{{variable_name}}` |
 
 Variable syntax validation must warn when the wrong syntax is used (EDM content with `{{...}}` or SN content with `${...}`).
 
@@ -91,7 +91,7 @@ GitHub Actions: `cargo fmt --check` → `cargo clippy` → `cargo test` on every
 ## Gotchas
 
 - **`cargo` may not be in PATH** — use `$HOME/.cargo/bin/cargo` if `cargo` command is not found
-- EDM and SureNotify use **different variable syntaxes** — must validate and warn on cross-use
+- EDM and Surenotify use **different variable syntaxes** — must validate and warn on cross-use
 - Config file permissions must be 600; API keys must never appear in stdout or logs
 - `nl config list` must mask API key values (`****...`)
 - JSON output auto-switches to compact when stdout is piped; `--page-all` uses NDJSON

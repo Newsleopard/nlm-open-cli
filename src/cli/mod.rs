@@ -8,7 +8,7 @@ pub mod sn;
 // ── Top-level CLI ──────────────────────────────────────────────
 
 #[derive(Parser, Debug)]
-#[command(name = "nl", about = "NewsLeopard EDM & SureNotify CLI", version)]
+#[command(name = "nl", about = "Newsleopard EDM & Surenotify CLI", version)]
 pub struct NlCli {
     #[command(subcommand)]
     pub command: Command,
@@ -39,7 +39,7 @@ pub enum Command {
     /// EDM API commands
     Edm(Box<edm::EdmArgs>),
 
-    /// SureNotify API commands
+    /// Surenotify API commands
     Sn(sn::SnArgs),
 
     /// MCP tool discovery and invocation (agent-friendly)
