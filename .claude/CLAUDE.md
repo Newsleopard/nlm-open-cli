@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-`nl` is a Rust CLI tool wrapping the Newsleopard EDM API (20 endpoints) and Surenotify API (14 endpoints) for email marketing and transactional messaging. Binary name: `nl`, crate name: `nl-cli`.
+`nlm` is a Rust CLI tool wrapping the Newsleopard EDM API (20 endpoints) and Surenotify API (14 endpoints) for email marketing and transactional messaging. Binary name: `nlm`, crate name: `nl-cli`.
 
-**Status:** Implemented — all modules complete and compiling. Architecture docs and PRD in `docs/`.
+**Status:** Implemented — all modules complete and compiling. Internal design docs in `docs/internal/`.
 
 ## Build & Development Commands
 
@@ -84,17 +84,17 @@ GitHub Actions: `cargo fmt --check` → `cargo clippy` → `cargo test` on every
 
 ## Reference Documents
 
-- `docs/PRD.md` — Full API coverage, use cases, acceptance criteria, error code table
-- `docs/Architecture.md` — Module structure, design patterns, type system, implementation phases
 - `docs/CLI-USER-GUIDE.md` — Complete command tree with examples, all parameters documented
+- `docs/internal/PRD.md` — (Internal) Full API coverage, use cases, acceptance criteria, error code table
+- `docs/internal/Architecture.md` — (Internal) Module structure, design patterns, type system, implementation phases
 
 ## Gotchas
 
 - **`cargo` may not be in PATH** — use `$HOME/.cargo/bin/cargo` if `cargo` command is not found
 - EDM and Surenotify use **different variable syntaxes** — must validate and warn on cross-use
 - Config file permissions must be 600; API keys must never appear in stdout or logs
-- `nl config list` must mask API key values (`****...`)
+- `nlm config list` must mask API key values (`****...`)
 - JSON output auto-switches to compact when stdout is piped; `--page-all` uses NDJSON
 - Report export has a separate, stricter rate limiter (1 req/10s) from general EDM calls (2 req/s)
-- Helper commands (`nl helper` / `nl x`) orchestrate multiple API calls — they need both EDM and SN clients
+- Helper commands (`nlm helper` / `nlm x`) orchestrate multiple API calls — they need both EDM and SN clients
 - Eval alignment: CLI behavior should match `nlm-open-skills/evals/evals.json` test cases

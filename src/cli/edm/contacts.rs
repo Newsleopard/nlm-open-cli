@@ -16,6 +16,10 @@ pub enum ContactsCommand {
     },
 
     /// List all contact groups
+    #[command(after_long_help = "EXAMPLES:\n  \
+        nlm edm contacts list-groups                    # First page, JSON\n  \
+        nlm edm contacts list-groups --format table     # Pretty table\n  \
+        nlm edm contacts list-groups --page-all         # Stream all pages as NDJSON")]
     ListGroups {
         /// Page number (1-based)
         #[arg(long)]
@@ -31,6 +35,9 @@ pub enum ContactsCommand {
     },
 
     /// Import contacts from a CSV/Excel file
+    #[command(after_long_help = "EXAMPLES:\n  \
+        nlm edm contacts import-file --list-sn L1 --file contacts.csv\n  \
+        nlm edm contacts import-file --list-sn L1 --file contacts.csv --wait")]
     ImportFile {
         /// Target contact list SN
         #[arg(long)]
@@ -54,6 +61,8 @@ pub enum ContactsCommand {
     },
 
     /// Import contacts from inline CSV text or a CSV file body
+    #[command(after_long_help = "EXAMPLE:\n  \
+        nlm edm contacts import-text --list-sn L1 --csv-text 'email,name\\na@b.com,Alice'")]
     ImportText {
         /// Target contact list SN
         #[arg(long)]

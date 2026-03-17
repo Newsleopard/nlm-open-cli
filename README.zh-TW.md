@@ -1,4 +1,4 @@
-# nl-cli
+# nlm — Newsleopard CLI
 
 **繁體中文** | [English](README.md)
 
@@ -11,6 +11,14 @@
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](LICENSE-MIT)
 [![Rust: 1.75+](https://img.shields.io/badge/rust-1.75%2B-orange.svg)](https://www.rust-lang.org/)
 
+> **使用 AI Agent？** 將以下內容複製給你的 AI Agent（Claude Code、Cursor、Windsurf 等）：
+>
+> ```text
+> Help me install nlm: https://raw.githubusercontent.com/Newsleopard/nlm-open-cli/main/docs/install.md
+> ```
+>
+> 詳見完整 [安裝指南](docs/install.md)。
+
 ---
 
 ## 目錄
@@ -18,7 +26,7 @@
 - [前置需求](#前置需求)
 - [安裝](#安裝)
 - [快速開始](#快速開始)
-- [為什麼選擇 nl？](#為什麼選擇-nl)
+- [為什麼選擇 nlm？](#為什麼選擇-nlm)
 - [指令總覽](#指令總覽)
 - [認證設定](#認證設定)
 - [全域參數](#全域參數)
@@ -54,29 +62,31 @@ cargo install nl-cli
 
 支援平台：Linux (x86_64, arm64)、macOS (x86_64, arm64)、Windows (x86_64)。
 
+> 執行檔命名為 `nlm`，避免與 Unix 系統指令 `/usr/bin/nl` 衝突。
+
 ### 從原始碼編譯
 
 ```bash
 git clone https://github.com/Newsleopard/nlm-open-cli.git
 cd nlm-open-cli
 cargo build --release
-# 執行檔位於 target/release/nl
+# 執行檔位於 target/release/nlm
 ```
 
 ## 快速開始
 
 ```bash
 # 1. 設定 API Key
-nl config init
+nlm config init
 
 # 2. 查詢帳戶餘額
-nl edm account balance
+nlm edm account balance
 
 # 3. 列出聯絡人群組
-nl edm contacts list-groups
+nlm edm contacts list-groups
 ```
 
-## 為什麼選擇 nl？
+## 為什麼選擇 nlm？
 
 ### 之前：直接呼叫 API
 
@@ -89,7 +99,7 @@ curl -s -H "x-api-key: $KEY" \
 ### 之後：一行指令
 
 ```bash
-nl edm contacts list-groups --format table
+nlm edm contacts list-groups --format table
 ```
 
 **核心優勢：**
@@ -106,28 +116,28 @@ nl edm contacts list-groups --format table
 
 | 指令群組 | 說明 | Endpoint 數量 |
 |----------|------|---------------|
-| `nl edm contacts` | 聯絡人群組管理（建立、列表、匯入、刪除） | 6 |
-| `nl edm campaign` | 電子報活動管理（送出、狀態、暫停、刪除） | 5 |
-| `nl edm ab-test` | A/B 測試活動 | 2 |
-| `nl edm report` | 活動報告（列表、指標、匯出、下載） | 4 |
-| `nl edm template` | 範本管理（列表、取得） | 2 |
-| `nl edm automation` | 自動化腳本觸發 | 1 |
-| `nl edm account` | 帳戶資訊（餘額查詢） | 1 |
-| `nl sn email` | 交易型 Email（發送、事件查詢） | 2 |
-| `nl sn sms` | 簡訊（發送、事件查詢、專屬號碼） | 3 |
-| `nl sn webhook` | Email Webhook CRUD | 3 |
-| `nl sn sms-webhook` | SMS Webhook CRUD | 3 |
-| `nl sn domain` | 寄件域名驗證（建立、驗證、移除） | 3 |
-| `nl config` | 設定檔管理 | -- |
-| `nl helper` | 高階編排指令 | -- |
+| `nlm edm contacts` | 聯絡人群組管理（建立、列表、匯入、刪除） | 6 |
+| `nlm edm campaign` | 電子報活動管理（送出、狀態、暫停、刪除） | 5 |
+| `nlm edm ab-test` | A/B 測試活動 | 2 |
+| `nlm edm report` | 活動報告（列表、指標、匯出、下載） | 4 |
+| `nlm edm template` | 範本管理（列表、取得） | 2 |
+| `nlm edm automation` | 自動化腳本觸發 | 1 |
+| `nlm edm account` | 帳戶資訊（餘額查詢） | 1 |
+| `nlm sn email` | 交易型 Email（發送、事件查詢） | 2 |
+| `nlm sn sms` | 簡訊（發送、事件查詢、專屬號碼） | 3 |
+| `nlm sn webhook` | Email Webhook CRUD | 3 |
+| `nlm sn sms-webhook` | SMS Webhook CRUD | 3 |
+| `nlm sn domain` | 寄件域名驗證（建立、驗證、移除） | 3 |
+| `nlm config` | 設定檔管理 | -- |
+| `nlm helper` | 高階編排指令 | -- |
 
 ## 認證設定
 
 | 使用情境 | 方式 | 設定方法 |
 |----------|------|----------|
-| 互動式使用（本地開發） | 設定檔 | `nl config init` |
+| 互動式使用（本地開發） | 設定檔 | `nlm config init` |
 | CI/CD 或容器環境 | 環境變數 | `export NL_EDM_API_KEY="..."` |
-| 多環境切換 | Profile | `nl config set edm_api_key "..." --profile staging` |
+| 多環境切換 | Profile | `nlm config set edm_api_key "..." --profile staging` |
 
 **認證優先順序：** 環境變數 > CLI flag > Profile 設定 > `[default]` section。
 
@@ -201,7 +211,7 @@ sn_api_key = "staging-sn-key"
 
 ```bash
 # 取得活動開信率
-result=$(nl edm report metrics --campaign-sn "$SN" -q 2>/tmp/nl_err.json)
+result=$(nlm edm report metrics --campaign-sn "$SN" -q 2>/tmp/nl_err.json)
 if [ $? -eq 0 ]; then
   echo "$result" | jq '.open_rate'
 else
@@ -211,12 +221,12 @@ fi
 
 ```bash
 # 串流所有群組，篩選開信率 > 30%
-nl edm contacts list-groups --page-all -q | jq 'select(.opened_rate > 0.3)'
+nlm edm contacts list-groups --page-all -q | jq 'select(.opened_rate > 0.3)'
 ```
 
 ```bash
 # Dry-run 預覽活動送出請求
-nl edm campaign submit --name "三月電子報" --dry-run
+nlm edm campaign submit --name "三月電子報" --dry-run
 ```
 
 ## 變數語法
@@ -225,8 +235,8 @@ EDM 與 Surenotify 使用**不同的變數語法**，混用會導致變數替換
 
 | API | 語法 | 範例 | 適用指令 |
 |-----|------|------|----------|
-| EDM | `${FIELD_NAME}` | `${NAME}`、`${ORDER_ID}` | `nl edm campaign`、`nl edm ab-test`、`nl edm automation` |
-| Surenotify | `{{variable_name}}` | `{{name}}`、`{{order_id}}` | `nl sn email`、`nl sn sms` |
+| EDM | `${FIELD_NAME}` | `${NAME}`、`${ORDER_ID}` | `nlm edm campaign`、`nlm edm ab-test`、`nlm edm automation` |
+| Surenotify | `{{variable_name}}` | `{{name}}`、`{{order_id}}` | `nlm sn email`、`nlm sn sms` |
 
 > CLI 會偵測並警告跨用情況（例如 EDM 內容中出現 `{{...}}`）。
 
@@ -236,9 +246,9 @@ EDM 與 Surenotify 使用**不同的變數語法**，混用會導致變數替換
 
 | 限制 | 值 | 影響指令 |
 |------|------|----------|
-| EDM 一般請求 | 2 req/s | 所有 `nl edm` 指令 |
-| Report 匯出 | 1 req/10s | `nl edm report export` |
-| SN 收件人上限 | 100 人/次 | `nl sn email send`、`nl sn sms send` |
+| EDM 一般請求 | 2 req/s | 所有 `nlm edm` 指令 |
+| Report 匯出 | 1 req/10s | `nlm edm report export` |
+| SN 收件人上限 | 100 人/次 | `nlm sn email send`、`nlm sn sms send` |
 
 HTTP 429 與 5xx 錯誤會自動以 exponential backoff 重試（500ms 起始、30s 上限、120s 總逾時）。
 

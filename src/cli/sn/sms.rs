@@ -9,6 +9,12 @@ pub struct SmsArgs {
 #[derive(clap::Subcommand, Debug)]
 pub enum SmsCommand {
     /// Send an SMS message
+    #[command(after_long_help = "\
+EXAMPLES:\n  \
+  # Single recipient\n  \
+  nlm sn sms send --content 'Your code is 1234' --phone 912345678 --country-code 886\n\n  \
+  # Multiple recipients from file\n  \
+  nlm sn sms send --content 'Flash sale today!' --recipients-file phones.json")]
     Send {
         /// Message content
         #[arg(long)]

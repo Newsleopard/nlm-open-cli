@@ -37,7 +37,7 @@ function getTarget() {
 function getArchiveInfo(target) {
   const isWindows = process.platform === "win32";
   const ext = isWindows ? "zip" : "tar.gz";
-  const name = `nl-v${VERSION}-${target}.${ext}`;
+  const name = `nlm-v${VERSION}-${target}.${ext}`;
   const url = `https://github.com/${REPO}/releases/download/v${VERSION}/${name}`;
   return { name, url, ext, isWindows };
 }
@@ -85,16 +85,16 @@ function extractZip(buffer, destDir) {
 async function main() {
   const target = getTarget();
   const { url, ext, isWindows } = getArchiveInfo(target);
-  const binaryName = isWindows ? "nl.exe" : "nl";
+  const binaryName = isWindows ? "nlm.exe" : "nlm";
   const binaryPath = path.join(BIN_DIR, binaryName);
 
   // Skip if binary already exists (e.g., CI caching)
   if (fs.existsSync(binaryPath)) {
-    console.log(`nl binary already exists at ${binaryPath}, skipping download.`);
+    console.log(`nlm binary already exists at ${binaryPath}, skipping download.`);
     return;
   }
 
-  console.log(`Downloading nl v${VERSION} for ${target}...`);
+  console.log(`Downloading nlm v${VERSION} for ${target}...`);
   console.log(`  ${url}`);
 
   const buffer = await download(url);
@@ -118,10 +118,24 @@ async function main() {
     fs.chmodSync(binaryPath, 0o755);
   }
 
-  console.log(`Installed nl v${VERSION} to ${binaryPath}`);
+  console.log(`Installed nlm v${VERSION} to ${binaryPath}`);
+
+  // Create backward-compatible "nl" symlink
+  const legacyName = isWindows ? "nl.exe" : "nl";
+  const legacyPath = path.join(BIN_DIR, legacyName);
+  try {
+    if (fs.existsSync(legacyPath)) fs.unlinkSync(legacyPath);
+    if (isWindows) {
+      fs.copyFileSync(binaryPath, legacyPath);
+    } else {
+      fs.symlinkSync(binaryName, legacyPath);
+    }
+  } catch (_) {
+    // Non-fatal: legacy alias is optional
+  }
 }
 
 main().catch((err) => {
-  console.error(`Failed to install nl: ${err.message}`);
+  console.error(`Failed to install nlm: ${err.message}`);
   process.exit(1);
 });

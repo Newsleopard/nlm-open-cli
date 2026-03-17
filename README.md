@@ -1,4 +1,4 @@
-# nl-cli
+# nlm — Newsleopard CLI
 
 **[繁體中文](README.zh-TW.md)** | English
 
@@ -11,6 +11,14 @@ Manage email campaigns, transactional messages, contacts, templates, and reports
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](LICENSE-MIT)
 [![Rust: 1.75+](https://img.shields.io/badge/rust-1.75%2B-orange.svg)](https://www.rust-lang.org/)
 
+> **Using an AI Agent?** Copy this to your agent (Claude Code, Cursor, Windsurf, etc.):
+>
+> ```text
+> Help me install nlm: https://raw.githubusercontent.com/Newsleopard/nlm-open-cli/main/docs/install.md
+> ```
+>
+> See the full [Installation Guide](docs/install.md) for details.
+
 ---
 
 ## Table of Contents
@@ -18,7 +26,7 @@ Manage email campaigns, transactional messages, contacts, templates, and reports
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
-- [Why nl?](#why-nl)
+- [Why nlm?](#why-nlm)
 - [Commands](#commands)
 - [Authentication](#authentication)
 - [Global Flags](#global-flags)
@@ -54,29 +62,31 @@ Download pre-built binaries for your platform from [Releases](https://github.com
 
 Available targets: Linux (x86_64, arm64), macOS (x86_64, arm64), Windows (x86_64).
 
+> The binary is named `nlm` to avoid conflict with the Unix `nl` (number lines) utility.
+
 ### Build from Source
 
 ```bash
 git clone https://github.com/Newsleopard/nlm-open-cli.git
 cd nlm-open-cli
 cargo build --release
-# Binary at target/release/nl
+# Binary at target/release/nlm
 ```
 
 ## Quick Start
 
 ```bash
 # 1. Configure your API key
-nl config init
+nlm config init
 
 # 2. Check account balance
-nl edm account balance
+nlm edm account balance
 
 # 3. List contact groups
-nl edm contacts list-groups
+nlm edm contacts list-groups
 ```
 
-## Why nl?
+## Why nlm?
 
 ### Before: raw API calls
 
@@ -89,7 +99,7 @@ curl -s -H "x-api-key: $KEY" \
 ### After: one command
 
 ```bash
-nl edm contacts list-groups --format table
+nlm edm contacts list-groups --format table
 ```
 
 **Key benefits:**
@@ -106,29 +116,29 @@ nl edm contacts list-groups --format table
 
 | Group | Description | Endpoints |
 |-------|-------------|-----------|
-| `nl edm contacts` | Contact group management (create, list, import, delete) | 6 |
-| `nl edm campaign` | Email campaign management (submit, status, pause, delete) | 5 |
-| `nl edm ab-test` | A/B test campaigns | 2 |
-| `nl edm report` | Campaign reports (list, metrics, export, download) | 4 |
-| `nl edm template` | Template management (list, get) | 2 |
-| `nl edm automation` | Automation script triggers | 1 |
-| `nl edm account` | Account info (balance) | 1 |
-| `nl sn email` | Transactional email (send, query events) | 2 |
-| `nl sn sms` | SMS (send, query events, dedicated numbers) | 3 |
-| `nl sn webhook` | Email webhook CRUD | 3 |
-| `nl sn sms-webhook` | SMS webhook CRUD | 3 |
-| `nl sn domain` | Sender domain verification (create, verify, remove) | 3 |
-| `nl mcp` | MCP tool discovery and invocation (for AI agents) | 2 |
-| `nl config` | Config file management | -- |
-| `nl helper` | High-level orchestration workflows | -- |
+| `nlm edm contacts` | Contact group management (create, list, import, delete) | 6 |
+| `nlm edm campaign` | Email campaign management (submit, status, pause, delete) | 5 |
+| `nlm edm ab-test` | A/B test campaigns | 2 |
+| `nlm edm report` | Campaign reports (list, metrics, export, download) | 4 |
+| `nlm edm template` | Template management (list, get) | 2 |
+| `nlm edm automation` | Automation script triggers | 1 |
+| `nlm edm account` | Account info (balance) | 1 |
+| `nlm sn email` | Transactional email (send, query events) | 2 |
+| `nlm sn sms` | SMS (send, query events, dedicated numbers) | 3 |
+| `nlm sn webhook` | Email webhook CRUD | 3 |
+| `nlm sn sms-webhook` | SMS webhook CRUD | 3 |
+| `nlm sn domain` | Sender domain verification (create, verify, remove) | 3 |
+| `nlm mcp` | MCP tool discovery and invocation (for AI agents) | 2 |
+| `nlm config` | Config file management | -- |
+| `nlm helper` | High-level orchestration workflows | -- |
 
 ## Authentication
 
 | Scenario | Method | Setup |
 |----------|--------|-------|
-| Interactive (local dev) | Config file | `nl config init` |
+| Interactive (local dev) | Config file | `nlm config init` |
 | CI/CD or containers | Environment variables | `export NL_EDM_API_KEY="..."` |
-| Multiple environments | Profiles | `nl config set edm_api_key "..." --profile staging` |
+| Multiple environments | Profiles | `nlm config set edm_api_key "..." --profile staging` |
 
 **Credential precedence:** Environment variable > CLI flag > Profile config > `[default]` section.
 
@@ -203,7 +213,7 @@ All errors are JSON on **stderr** with a `type` field (`api`, `validation`, `aut
 
 ```bash
 # Get campaign open rate
-result=$(nl edm report metrics --campaign-sn "$SN" -q 2>/tmp/nl_err.json)
+result=$(nlm edm report metrics --campaign-sn "$SN" -q 2>/tmp/nl_err.json)
 if [ $? -eq 0 ]; then
   echo "$result" | jq '.open_rate'
 else
@@ -213,12 +223,12 @@ fi
 
 ```bash
 # Stream all groups, filter by open rate > 30%
-nl edm contacts list-groups --page-all -q | jq 'select(.opened_rate > 0.3)'
+nlm edm contacts list-groups --page-all -q | jq 'select(.opened_rate > 0.3)'
 ```
 
 ```bash
 # Dry-run to preview a campaign submit request
-nl edm campaign submit --name "March Newsletter" --dry-run
+nlm edm campaign submit --name "March Newsletter" --dry-run
 ```
 
 ## Variable Syntax
@@ -227,8 +237,8 @@ EDM and Surenotify use **different variable syntaxes**. Mixing them causes silen
 
 | API | Syntax | Example | Used in |
 |-----|--------|---------|---------|
-| EDM | `${FIELD_NAME}` | `${NAME}`, `${ORDER_ID}` | `nl edm campaign`, `nl edm ab-test`, `nl edm automation` |
-| Surenotify | `{{variable_name}}` | `{{name}}`, `{{order_id}}` | `nl sn email`, `nl sn sms` |
+| EDM | `${FIELD_NAME}` | `${NAME}`, `${ORDER_ID}` | `nlm edm campaign`, `nlm edm ab-test`, `nlm edm automation` |
+| Surenotify | `{{variable_name}}` | `{{name}}`, `{{order_id}}` | `nlm sn email`, `nlm sn sms` |
 
 > The CLI detects and warns on cross-use (e.g., `{{...}}` in EDM content).
 
@@ -238,9 +248,9 @@ Built-in token bucket rate limiting ensures API compliance automatically:
 
 | Limit | Value | Affected Commands |
 |-------|-------|-------------------|
-| EDM general | 2 req/s | All `nl edm` commands |
-| Report export | 1 req/10s | `nl edm report export` |
-| SN recipients | 100 per request | `nl sn email send`, `nl sn sms send` |
+| EDM general | 2 req/s | All `nlm edm` commands |
+| Report export | 1 req/10s | `nlm edm report export` |
+| SN recipients | 100 per request | `nlm sn email send`, `nlm sn sms send` |
 
 HTTP 429 and 5xx errors are retried with exponential backoff (500ms initial, 30s max, 120s total timeout).
 

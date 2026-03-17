@@ -1,4 +1,4 @@
-# CLI 使用手冊 — nl
+# CLI 使用手冊 — nlm
 
 ## 1. 安裝與設定
 
@@ -6,7 +6,7 @@
 
 ```bash
 # Homebrew (macOS / Linux)
-brew install newsleopard/tap/nl
+brew install newsleopard/tap/nlm
 
 # Cargo
 cargo install nl-cli
@@ -19,7 +19,7 @@ cargo build --release
 ### 1.2 初始設定
 
 ```bash
-nl config init
+nlm config init
 ```
 
 互動式流程會提示你輸入：
@@ -33,33 +33,33 @@ nl config init
 
 ```bash
 # 設定單一值
-nl config set edm_api_key "your-key-here"
-nl config set sn_api_key "your-sn-key-here"
-nl config set default_format table
+nlm config set edm_api_key "your-key-here"
+nlm config set sn_api_key "your-sn-key-here"
+nlm config set default_format table
 
 # 查看設定
-nl config get edm_api_key    # 顯示 ****...（遮蔽）
-nl config list               # 列出所有設定
+nlm config get edm_api_key    # 顯示 ****...（遮蔽）
+nlm config list               # 列出所有設定
 ```
 
 ### 1.4 多環境 Profile
 
 ```bash
 # 建立 staging profile
-nl config profile create staging
-nl config set edm_api_key "staging-key" --profile staging
+nlm config profile create staging
+nlm config set edm_api_key "staging-key" --profile staging
 
 # 使用 staging
-nl edm account balance --profile staging
+nlm edm account balance --profile staging
 
 # 或透過環境變數
-NL_PROFILE=staging nl edm account balance
+NL_PROFILE=staging nlm edm account balance
 
 # 列出所有 profiles
-nl config profile list
+nlm config profile list
 
 # 刪除 profile
-nl config profile delete staging
+nlm config profile delete staging
 ```
 
 ### 1.5 環境變數
@@ -92,7 +92,7 @@ nl config profile delete staging
 #### JSON（預設）
 
 ```bash
-nl edm account balance
+nlm edm account balance
 ```
 ```json
 {
@@ -104,14 +104,14 @@ nl edm account balance
 在 pipe 中自動切換為 compact：
 
 ```bash
-nl edm account balance | jq '.email'
+nlm edm account balance | jq '.email'
 # 10000
 ```
 
 #### Table
 
 ```bash
-nl edm contacts list-groups --format table
+nlm edm contacts list-groups --format table
 ```
 ```
 ┌──────────┬─────────────┬───────────────┬────────────┬────────────┬──────────┐
@@ -126,7 +126,7 @@ nl edm contacts list-groups --format table
 #### YAML
 
 ```bash
-nl edm account balance --format yaml
+nlm edm account balance --format yaml
 ```
 ```yaml
 email: 10000
@@ -136,7 +136,7 @@ sms: 500
 #### CSV
 
 ```bash
-nl edm contacts list-groups --format csv > groups.csv
+nlm edm contacts list-groups --format csv > groups.csv
 ```
 ```csv
 sn,name,subscribedCnt,openedRate,clickedRate,status
@@ -149,7 +149,7 @@ GRP-002,新用戶,456,28.1,5.7,GENERAL
 預覽 HTTP 請求而不實際送出：
 
 ```bash
-nl edm campaign submit \
+nlm edm campaign submit \
   --name "Test" \
   --lists GRP-001 \
   --subject "Hello" \
@@ -195,11 +195,11 @@ nl edm campaign submit \
 
 ```bash
 # -v: 顯示 HTTP 方法和 URL
-nl edm account balance -v
+nlm edm account balance -v
 # → GET https://api.newsleopard.com/v1/balance [200 OK] 42ms
 
 # -vv: 顯示完整 headers 和 body
-nl edm account balance -vv
+nlm edm account balance -vv
 # → GET https://api.newsleopard.com/v1/balance
 # → Request Headers: { x-api-key: ****..., content-type: application/json }
 # → Response Status: 200 OK (42ms)
@@ -211,12 +211,12 @@ nl edm account balance -vv
 
 ## 3. EDM API 指令
 
-### 3.1 帳戶（`nl edm account`）
+### 3.1 帳戶（`nlm edm account`）
 
 #### 查詢餘額
 
 ```bash
-nl edm account balance
+nlm edm account balance
 ```
 
 ```json
@@ -225,12 +225,12 @@ nl edm account balance
 
 ---
 
-### 3.2 聯絡人管理（`nl edm contacts`）
+### 3.2 聯絡人管理（`nlm edm contacts`）
 
 #### 建立群組
 
 ```bash
-nl edm contacts create-group --name "VIP 客戶"
+nlm edm contacts create-group --name "VIP 客戶"
 ```
 
 ```json
@@ -241,30 +241,30 @@ nl edm contacts create-group --name "VIP 客戶"
 
 ```bash
 # 預設分頁
-nl edm contacts list-groups
+nlm edm contacts list-groups
 
 # 指定分頁
-nl edm contacts list-groups --size 10 --page 2
+nlm edm contacts list-groups --size 10 --page 2
 
 # 取得所有頁面（NDJSON 串流）
-nl edm contacts list-groups --page-all
+nlm edm contacts list-groups --page-all
 ```
 
 #### 檔案匯入聯絡人
 
 ```bash
 # 基本匯入
-nl edm contacts import-file --list-sn GRP-abc123 --file contacts.csv
+nlm edm contacts import-file --list-sn GRP-abc123 --file contacts.csv
 
 # 匯入並等待完成
-nl edm contacts import-file --list-sn GRP-abc123 --file contacts.csv --wait
+nlm edm contacts import-file --list-sn GRP-abc123 --file contacts.csv --wait
 
 # 指定 webhook 回呼
-nl edm contacts import-file --list-sn GRP-abc123 --file contacts.csv \
+nlm edm contacts import-file --list-sn GRP-abc123 --file contacts.csv \
   --webhook-url https://api.example.com/import-callback
 
 # 自訂輪詢間隔（秒）
-nl edm contacts import-file --list-sn GRP-abc123 --file contacts.csv \
+nlm edm contacts import-file --list-sn GRP-abc123 --file contacts.csv \
   --wait --poll-interval 10
 ```
 
@@ -278,19 +278,19 @@ nl edm contacts import-file --list-sn GRP-abc123 --file contacts.csv \
 
 ```bash
 # 直接傳入 CSV 文字
-nl edm contacts import-text --list-sn GRP-abc123 \
+nlm edm contacts import-text --list-sn GRP-abc123 \
   --csv-text "EMAIL,NAME
 user1@example.com,Alice
 user2@example.com,Bob"
 
 # 從檔案讀取 CSV 文字
-nl edm contacts import-text --list-sn GRP-abc123 --csv-file contacts.csv
+nlm edm contacts import-text --list-sn GRP-abc123 --csv-file contacts.csv
 ```
 
 #### 查詢匯入狀態
 
 ```bash
-nl edm contacts import-status --import-sn IMP-xyz789
+nlm edm contacts import-status --import-sn IMP-xyz789
 ```
 
 ```json
@@ -317,7 +317,7 @@ nl edm contacts import-status --import-sn IMP-xyz789
 #### 刪除聯絡人
 
 ```bash
-nl edm contacts remove \
+nlm edm contacts remove \
   --list-sn GRP-abc123 \
   --field DOMAIN \
   --operator like \
@@ -330,12 +330,12 @@ nl edm contacts remove \
 
 ---
 
-### 3.3 活動管理（`nl edm campaign`）
+### 3.3 活動管理（`nlm edm campaign`）
 
 #### 送出活動
 
 ```bash
-nl edm campaign submit \
+nlm edm campaign submit \
   --name "三月電子報" \
   --lists GRP-001,GRP-002 \
   --subject "三月份精選優惠 — 最高 5 折" \
@@ -371,7 +371,7 @@ nl edm campaign submit \
 **排程發送範例：**
 
 ```bash
-nl edm campaign submit \
+nlm edm campaign submit \
   --name "排程活動" \
   --lists GRP-001 \
   --subject "排程測試" \
@@ -386,7 +386,7 @@ nl edm campaign submit \
 **GA 追蹤範例：**
 
 ```bash
-nl edm campaign submit \
+nlm edm campaign submit \
   --name "GA 追蹤活動" \
   --lists GRP-001 \
   --subject "促銷活動" \
@@ -404,7 +404,7 @@ nl edm campaign submit \
 不儲存聯絡人，發送後即丟棄：
 
 ```bash
-nl edm campaign submit-once \
+nlm edm campaign submit-once \
   --contacts-file one-time-list.csv \
   --name "一次性發送" \
   --subject "特別通知" \
@@ -416,7 +416,7 @@ nl edm campaign submit-once \
 #### 查詢活動狀態
 
 ```bash
-nl edm campaign status --sn CAMP-abc123
+nlm edm campaign status --sn CAMP-abc123
 ```
 
 ```json
@@ -435,14 +435,14 @@ nl edm campaign status --sn CAMP-abc123
 #### 暫停活動
 
 ```bash
-nl edm campaign pause --sn CAMP-abc123
+nlm edm campaign pause --sn CAMP-abc123
 # 204 No Content → exit code 0
 ```
 
 #### 刪除活動
 
 ```bash
-nl edm campaign delete --sns CAMP-001,CAMP-002
+nlm edm campaign delete --sns CAMP-001,CAMP-002
 ```
 
 ```json
@@ -455,13 +455,13 @@ nl edm campaign delete --sns CAMP-001,CAMP-002
 
 ---
 
-### 3.4 A/B 測試（`nl edm ab-test`）
+### 3.4 A/B 測試（`nlm edm ab-test`）
 
 #### 送出 A/B 測試
 
 ```bash
 # 主旨測試
-nl edm ab-test submit \
+nlm edm ab-test submit \
   --name "主旨 A/B 測試" \
   --lists GRP-001 \
   --test-on subject \
@@ -475,7 +475,7 @@ nl edm ab-test submit \
   --html-file promo.html
 
 # 寄件人測試
-nl edm ab-test submit \
+nlm edm ab-test submit \
   --name "寄件人 A/B 測試" \
   --lists GRP-001 \
   --test-on sender \
@@ -490,7 +490,7 @@ nl edm ab-test submit \
   --html-file promo.html
 
 # 內容測試
-nl edm ab-test submit \
+nlm edm ab-test submit \
   --name "內容 A/B 測試" \
   --lists GRP-001 \
   --test-on content \
@@ -516,7 +516,7 @@ nl edm ab-test submit \
 #### 單次上傳 A/B 測試
 
 ```bash
-nl edm ab-test submit-once \
+nlm edm ab-test submit-once \
   --contacts-file one-time-list.csv \
   --test-on subject \
   # ... 其餘參數同 submit
@@ -524,12 +524,12 @@ nl edm ab-test submit-once \
 
 ---
 
-### 3.5 報告（`nl edm report`）
+### 3.5 報告（`nlm edm report`）
 
 #### 列出活動碼
 
 ```bash
-nl edm report list \
+nlm edm report list \
   --start-date "2026-03-01T00:00:00.00Z" \
   --end-date "2026-03-16T23:59:59.00Z"
 ```
@@ -537,10 +537,10 @@ nl edm report list \
 #### 活動績效指標
 
 ```bash
-nl edm report metrics --sns CAMP-001,CAMP-002
+nlm edm report metrics --sns CAMP-001,CAMP-002
 
 # Table 格式（方便閱讀）
-nl edm report metrics --sns CAMP-001,CAMP-002 --format table
+nlm edm report metrics --sns CAMP-001,CAMP-002 --format table
 ```
 
 ```json
@@ -564,10 +564,10 @@ nl edm report metrics --sns CAMP-001,CAMP-002 --format table
 
 ```bash
 # 觸發匯出
-nl edm report export --sn CAMP-001
+nlm edm report export --sn CAMP-001
 
 # 匯出並等待完成後下載
-nl edm report export --sn CAMP-001 --wait --output ./report.csv
+nlm edm report export --sn CAMP-001 --wait --output ./report.csv
 ```
 
 **注意：** 匯出有 1 request/10 seconds 的限流。
@@ -575,51 +575,51 @@ nl edm report export --sn CAMP-001 --wait --output ./report.csv
 #### 取得報告下載連結
 
 ```bash
-nl edm report download-link --sn CAMP-001
+nlm edm report download-link --sn CAMP-001
 ```
 
 ---
 
-### 3.6 範本（`nl edm template`）
+### 3.6 範本（`nlm edm template`）
 
 #### 列出範本
 
 ```bash
-nl edm template list
-nl edm template list --format table
+nlm edm template list
+nlm edm template list --format table
 ```
 
 #### 取得範本內容
 
 ```bash
 # 輸出到 stdout
-nl edm template get --id TPL-001
+nlm edm template get --id TPL-001
 
 # 儲存到檔案
-nl edm template get --id TPL-001 --output template.html
+nlm edm template get --id TPL-001 --output template.html
 ```
 
 ---
 
-### 3.7 自動化（`nl edm automation`）
+### 3.7 自動化（`nlm edm automation`）
 
 #### 觸發/停止自動化腳本
 
 ```bash
 # 觸發
-nl edm automation trigger \
+nlm edm automation trigger \
   --workflow "auto-script-001" \
   --event trigger \
   --recipients '[{"name":"Alice","address":"alice@example.com","variables":{"ORDER_ID":"A123"}}]'
 
 # 從檔案讀取收件者
-nl edm automation trigger \
+nlm edm automation trigger \
   --workflow "auto-script-001" \
   --event trigger \
   --recipients-file recipients.json
 
 # 停止
-nl edm automation trigger \
+nlm edm automation trigger \
   --workflow "auto-script-001" \
   --event terminate \
   --recipients '[{"name":"Alice","address":"alice@example.com"}]'
@@ -631,20 +631,20 @@ nl edm automation trigger \
 
 ## 4. Surenotify API 指令
 
-### 4.1 Email（`nl sn email`）
+### 4.1 Email（`nlm sn email`）
 
 #### 發送 Email
 
 ```bash
 # 基本發送
-nl sn email send \
+nlm sn email send \
   --subject "訂單確認" \
   --from-address "noreply@example.com" \
   --html "<h1>您的訂單已確認</h1>" \
   --to alice@example.com,bob@example.com
 
 # 含個人化變數
-nl sn email send \
+nlm sn email send \
   --subject "訂單確認 {{order_id}}" \
   --from-address "noreply@example.com" \
   --from-name "Example Store" \
@@ -655,14 +655,14 @@ nl sn email send \
   ]'
 
 # 從檔案讀取 HTML 和收件者
-nl sn email send \
+nlm sn email send \
   --subject "週報" \
   --from-address "report@example.com" \
   --html-file weekly-report.html \
   --recipients-file team.json
 
 # 含取消訂閱連結
-nl sn email send \
+nlm sn email send \
   --subject "電子報" \
   --from-address "news@example.com" \
   --html-file newsletter.html \
@@ -678,13 +678,13 @@ nl sn email send \
 
 ```bash
 # 用 message ID 查詢
-nl sn email events --id "msg-uuid-123"
+nlm sn email events --id "msg-uuid-123"
 
 # 用收件者地址查詢
-nl sn email events --recipient alice@example.com
+nlm sn email events --recipient alice@example.com
 
 # 加上時間範圍和狀態篩選
-nl sn email events \
+nlm sn email events \
   --recipient alice@example.com \
   --from "2026-03-01T00:00:00.00Z" \
   --to "2026-03-16T23:59:59.00Z" \
@@ -699,19 +699,19 @@ nl sn email events \
 
 ---
 
-### 4.2 SMS（`nl sn sms`）
+### 4.2 SMS（`nlm sn sms`）
 
 #### 發送簡訊
 
 ```bash
 # 基本發送
-nl sn sms send \
+nlm sn sms send \
   --content "【Example Store】您的驗證碼是 {{code}}" \
   --phone 0912345678 \
   --country-code 886
 
 # 批次發送
-nl sn sms send \
+nlm sn sms send \
   --content "【Example Store】親愛的 {{name}}，您的訂單 {{order_id}} 已出貨" \
   --recipients '[
     {"address":"0912345678","country_code":"886","variables":{"name":"Alice","order_id":"A001"}},
@@ -719,12 +719,12 @@ nl sn sms send \
   ]'
 
 # 從檔案讀取收件者
-nl sn sms send \
+nlm sn sms send \
   --content "【品牌】促銷通知" \
   --recipients-file sms-recipients.json
 
 # 指定專屬號碼和重試時間
-nl sn sms send \
+nlm sn sms send \
   --content "【Brand】Verification code: {{code}}" \
   --phone 0912345678 \
   --country-code 886 \
@@ -741,13 +741,13 @@ nl sn sms send \
 
 ```bash
 # 用 message ID 查詢
-nl sn sms events --id "msg-uuid-456"
+nlm sn sms events --id "msg-uuid-456"
 
 # 用收件者查詢
-nl sn sms events --recipient 0912345678 --country-code 886
+nlm sn sms events --recipient 0912345678 --country-code 886
 
 # 加篩選條件
-nl sn sms events \
+nlm sn sms events \
   --recipient 0912345678 \
   --country-code 886 \
   --from "2026-03-01T00:00:00.00Z" \
@@ -759,7 +759,7 @@ nl sn sms events \
 #### 查詢專屬號碼
 
 ```bash
-nl sn sms exclusive-number
+nlm sn sms exclusive-number
 ```
 
 ```json
@@ -776,16 +776,16 @@ nl sn sms exclusive-number
 
 ---
 
-### 4.3 Email Webhook（`nl sn webhook`）
+### 4.3 Email Webhook（`nlm sn webhook`）
 
 #### 建立/更新 Webhook
 
 ```bash
-nl sn webhook create --event-type delivery --url "https://api.example.com/webhooks/delivery"
-nl sn webhook create --event-type open --url "https://api.example.com/webhooks/open"
-nl sn webhook create --event-type click --url "https://api.example.com/webhooks/click"
-nl sn webhook create --event-type bounce --url "https://api.example.com/webhooks/bounce"
-nl sn webhook create --event-type complaint --url "https://api.example.com/webhooks/complaint"
+nlm sn webhook create --event-type delivery --url "https://api.example.com/webhooks/delivery"
+nlm sn webhook create --event-type open --url "https://api.example.com/webhooks/open"
+nlm sn webhook create --event-type click --url "https://api.example.com/webhooks/click"
+nlm sn webhook create --event-type bounce --url "https://api.example.com/webhooks/bounce"
+nlm sn webhook create --event-type complaint --url "https://api.example.com/webhooks/complaint"
 ```
 
 **事件類型：** `delivery`、`open`、`click`、`bounce`、`complaint`
@@ -793,25 +793,25 @@ nl sn webhook create --event-type complaint --url "https://api.example.com/webho
 #### 列出 Webhook
 
 ```bash
-nl sn webhook list
-nl sn webhook list --format table
+nlm sn webhook list
+nlm sn webhook list --format table
 ```
 
 #### 刪除 Webhook
 
 ```bash
-nl sn webhook delete --event-type bounce
+nlm sn webhook delete --event-type bounce
 ```
 
 ---
 
-### 4.4 SMS Webhook（`nl sn sms-webhook`）
+### 4.4 SMS Webhook（`nlm sn sms-webhook`）
 
 #### 建立/更新 SMS Webhook
 
 ```bash
-nl sn sms-webhook create --event-type delivery --url "https://api.example.com/sms-webhooks/delivery"
-nl sn sms-webhook create --event-type bounce --url "https://api.example.com/sms-webhooks/bounce"
+nlm sn sms-webhook create --event-type delivery --url "https://api.example.com/sms-webhooks/delivery"
+nlm sn sms-webhook create --event-type bounce --url "https://api.example.com/sms-webhooks/bounce"
 ```
 
 **SMS 事件類型：** `delivery`、`bounce`
@@ -819,23 +819,23 @@ nl sn sms-webhook create --event-type bounce --url "https://api.example.com/sms-
 #### 列出 SMS Webhook
 
 ```bash
-nl sn sms-webhook list
+nlm sn sms-webhook list
 ```
 
 #### 刪除 SMS Webhook
 
 ```bash
-nl sn sms-webhook delete --event-type delivery
+nlm sn sms-webhook delete --event-type delivery
 ```
 
 ---
 
-### 4.5 域名驗證（`nl sn domain`）
+### 4.5 域名驗證（`nlm sn domain`）
 
 #### 建立域名驗證記錄
 
 ```bash
-nl sn domain create --domain mail.example.com
+nlm sn domain create --domain mail.example.com
 ```
 
 ```json
@@ -860,7 +860,7 @@ nl sn domain create --domain mail.example.com
 #### 驗證 DNS 記錄
 
 ```bash
-nl sn domain verify --domain mail.example.com
+nlm sn domain verify --domain mail.example.com
 ```
 
 回傳同樣的 DNS 記錄陣列，但 `valid` 欄位會更新。
@@ -868,25 +868,25 @@ nl sn domain verify --domain mail.example.com
 #### 移除域名驗證
 
 ```bash
-nl sn domain remove --domain mail.example.com
+nlm sn domain remove --domain mail.example.com
 ```
 
 **設定流程：**
-1. `nl sn domain create` — 取得需要設定的 DNS 記錄
+1. `nlm sn domain create` — 取得需要設定的 DNS 記錄
 2. 到域名註冊商設定 DNS 記錄
 3. 等待 DNS 傳播（最長 48 小時）
-4. `nl sn domain verify` — 驗證設定是否正確
+4. `nlm sn domain verify` — 驗證設定是否正確
 
 ---
 
-## 5. Helper 編排指令（`nl helper` / `nl x`）
+## 5. Helper 編排指令（`nlm helper` / `nlm x`）
 
-Helper 指令將多步驟工作流程封裝為一鍵操作。可用 `nl helper` 或簡寫 `nl x` 呼叫。
+Helper 指令將多步驟工作流程封裝為一鍵操作。可用 `nlm helper` 或簡寫 `nlm x` 呼叫。
 
 ### 5.1 campaign-send — 一鍵發送活動
 
 ```bash
-nl helper campaign-send \
+nlm helper campaign-send \
   --name "三月電子報" \
   --lists GRP-001 \
   --subject "三月份精選優惠" \
@@ -908,7 +908,7 @@ nl helper campaign-send \
 ### 5.2 import-and-wait — 匯入並等待完成
 
 ```bash
-nl helper import-and-wait \
+nlm helper import-and-wait \
   --list-sn GRP-001 \
   --file customers.csv \
   --timeout 600
@@ -931,7 +931,7 @@ nl helper import-and-wait \
 ### 5.3 report-download — 匯出並下載報告
 
 ```bash
-nl helper report-download --sn CAMP-001 --output ./report.csv
+nlm helper report-download --sn CAMP-001 --output ./report.csv
 ```
 
 **流程：**
@@ -943,10 +943,10 @@ nl helper report-download --sn CAMP-001 --output ./report.csv
 
 ```bash
 # 手動驗證（顯示 DNS 記錄後等待使用者設定）
-nl helper domain-setup --domain mail.example.com
+nlm helper domain-setup --domain mail.example.com
 
 # 自動等待後驗證
-nl helper domain-setup --domain mail.example.com --auto-verify-after 300
+nlm helper domain-setup --domain mail.example.com --auto-verify-after 300
 ```
 
 **流程：**
@@ -957,33 +957,33 @@ nl helper domain-setup --domain mail.example.com --auto-verify-after 300
 
 ---
 
-## 6. 設定管理指令（`nl config`）
+## 6. 設定管理指令（`nlm config`）
 
 ### 6.1 互動式初始化
 
 ```bash
-nl config init
+nlm config init
 ```
 
 ### 6.2 設定值
 
 ```bash
-nl config set <KEY> <VALUE>
-nl config set edm_api_key "your-key" --profile staging
+nlm config set <KEY> <VALUE>
+nlm config set edm_api_key "your-key" --profile staging
 ```
 
 ### 6.3 讀取值
 
 ```bash
-nl config get <KEY>
-nl config get edm_api_key
+nlm config get <KEY>
+nlm config get edm_api_key
 # → ****...abc (遮蔽前綴，顯示末 3 碼)
 ```
 
 ### 6.4 列出所有設定
 
 ```bash
-nl config list
+nlm config list
 ```
 
 ```
@@ -1000,9 +1000,9 @@ Profile: staging
 ### 6.5 Profile 管理
 
 ```bash
-nl config profile create staging
-nl config profile list
-nl config profile delete staging
+nlm config profile create staging
+nlm config profile list
+nlm config profile delete staging
 ```
 
 ---
@@ -1045,22 +1045,22 @@ nl config profile delete staging
 
 ```bash
 # API Key 問題
-nl edm account balance
+nlm edm account balance
 # → {"error": {"type": "auth", "message": "Authentication error: Forbidden", ...}}
-# 解法: nl config set edm_api_key "correct-key"
+# 解法: nlm config set edm_api_key "correct-key"
 
 # 寄件人未驗證
-nl edm campaign submit --from-address "unverified@example.com" ...
+nlm edm campaign submit --from-address "unverified@example.com" ...
 # → {"error": {"type": "api", "message": "API error 400: [40011] Unverified sender address", ...}}
 # 解法: 到 Dashboard → 設定 → 驗證寄件人地址
 
 # 餘額不足
-nl edm campaign submit ...
+nlm edm campaign submit ...
 # → {"error": {"type": "api", "message": "API error 400: [40012] Insufficient balance", ...}}
-# 解法: nl edm account balance 查看餘額，聯繫客服加值
+# 解法: nlm edm account balance 查看餘額，聯繫客服加值
 
 # 變數語法混用
-nl edm campaign submit --html "<p>Hi {{name}}</p>" ...
+nlm edm campaign submit --html "<p>Hi {{name}}</p>" ...
 # → Warning: EDM API 使用 ${FIELD} 變數語法，偵測到 {{...}} 格式（Surenotify 語法）
 ```
 
@@ -1072,25 +1072,25 @@ nl edm campaign submit --html "<p>Hi {{name}}</p>" ...
 
 ```bash
 # 取得 email 餘額
-EMAIL_BALANCE=$(nl edm account balance -q | jq '.email')
+EMAIL_BALANCE=$(nlm edm account balance -q | jq '.email')
 
 # 取得所有群組 SN
-nl edm contacts list-groups --page-all -q | jq -r '.sn'
+nlm edm contacts list-groups --page-all -q | jq -r '.sn'
 
 # 篩選開信率 > 30% 的群組
-nl edm contacts list-groups --page-all -q | jq 'select(.openedRate > 30)'
+nlm edm contacts list-groups --page-all -q | jq 'select(.openedRate > 30)'
 ```
 
 ### 8.2 搭配 xargs 批次處理
 
 ```bash
 # 刪除所有 DRAFT 狀態的活動
-nl edm report list --start-date "$START" --end-date "$END" -q \
+nlm edm report list --start-date "$START" --end-date "$END" -q \
   | jq -r '.[].sn' \
-  | xargs -I{} nl edm campaign status --sn {} -q \
+  | xargs -I{} nlm edm campaign status --sn {} -q \
   | jq -r 'select(.status == "DRAFT") | .sn' \
   | paste -sd, - \
-  | xargs -I{} nl edm campaign delete --sns {}
+  | xargs -I{} nlm edm campaign delete --sns {}
 ```
 
 ### 8.3 錯誤處理範本
@@ -1100,7 +1100,7 @@ nl edm report list --start-date "$START" --end-date "$END" -q \
 set -euo pipefail
 
 # 發送並檢查結果
-RESULT=$(nl sn email send \
+RESULT=$(nlm sn email send \
   --subject "Test" \
   --from-address "test@example.com" \
   --html "<p>Test</p>" \
@@ -1116,17 +1116,17 @@ echo "發送成功: $MSG_ID"
 
 # 查詢送達狀態
 sleep 30
-nl sn email events --id "$MSG_ID" --status delivery
+nlm sn email events --id "$MSG_ID" --status delivery
 ```
 
 ### 8.4 CSV 輸出到 spreadsheet
 
 ```bash
 # 匯出活動指標為 CSV
-nl edm report metrics --sns CAMP-001,CAMP-002,CAMP-003 --format csv > metrics.csv
+nlm edm report metrics --sns CAMP-001,CAMP-002,CAMP-003 --format csv > metrics.csv
 
 # 匯出所有群組資訊
-nl edm contacts list-groups --page-all --format csv > groups.csv
+nlm edm contacts list-groups --page-all --format csv > groups.csv
 ```
 
 ---
@@ -1135,8 +1135,8 @@ nl edm contacts list-groups --page-all --format csv > groups.csv
 
 | API | 語法 | 範例 | CLI 指令群 |
 |-----|------|------|-----------|
-| EDM | `${FIELD_NAME}` | `${NAME}`, `${ORDER_ID}` | `nl edm campaign`, `nl edm ab-test` |
-| Surenotify | `{{variable_name}}` | `{{name}}`, `{{order_id}}` | `nl sn email`, `nl sn sms` |
+| EDM | `${FIELD_NAME}` | `${NAME}`, `${ORDER_ID}` | `nlm edm campaign`, `nlm edm ab-test` |
+| Surenotify | `{{variable_name}}` | `{{name}}`, `{{order_id}}` | `nlm sn email`, `nlm sn sms` |
 
 **注意：** 混用變數語法會導致變數無法替換。CLI 會在送出前檢查並發出警告。
 
@@ -1146,10 +1146,10 @@ nl edm contacts list-groups --page-all --format csv > groups.csv
 
 | 限制 | 值 | 影響指令 |
 |------|---|---------|
-| EDM 一般限流 | 2 requests/second | 所有 `nl edm` 指令 |
-| EDM 每日上限 | 300,000 requests/day | 所有 `nl edm` 指令 |
-| Report 匯出限流 | 1 request/10 seconds | `nl edm report export` |
-| SN 收件者上限 | 100 人/request | `nl sn email send`, `nl sn sms send` |
+| EDM 一般限流 | 2 requests/second | 所有 `nlm edm` 指令 |
+| EDM 每日上限 | 300,000 requests/day | 所有 `nlm edm` 指令 |
+| Report 匯出限流 | 1 request/10 seconds | `nlm edm report export` |
+| SN 收件者上限 | 100 人/request | `nlm sn email send`, `nlm sn sms send` |
 | SN 變數長度 | 100 字元/值 | 所有含 variables 的指令 |
 
 CLI 內建 token bucket 限流器，自動遵守 rate limits。超過每日上限時會回傳 exit code 4。

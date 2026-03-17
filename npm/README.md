@@ -1,8 +1,8 @@
-# @newsleopard/nl-cli
+# nlm — Newsleopard CLI
 
 CLI for [Newsleopard](https://www.newsleopard.com/) EDM API and Surenotify transactional messaging.
 
-This npm package downloads the pre-built `nl` binary for your platform from [GitHub Releases](https://github.com/Newsleopard/nlm-open-cli/releases).
+This npm package downloads the pre-built `nlm` binary for your platform from [GitHub Releases](https://github.com/Newsleopard/nlm-open-cli/releases).
 
 ## Install
 
@@ -13,9 +13,9 @@ npm install -g @newsleopard/nl-cli
 ## Usage
 
 ```bash
-nl config init          # Configure API key
-nl edm account balance  # Check account balance
-nl edm contacts list-groups --format table
+nlm config init          # Configure API key
+nlm edm account balance  # Check account balance
+nlm edm contacts list-groups --format table
 ```
 
 ## Supported Platforms

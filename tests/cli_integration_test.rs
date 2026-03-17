@@ -1,4 +1,4 @@
-//! CLI end-to-end integration tests for the `nl` binary.
+//! CLI end-to-end integration tests for the `nlm` binary.
 //!
 //! These tests exercise the full command-line interface via `assert_cmd`, verifying:
 //! - Help output for all top-level and nested subcommands
@@ -17,9 +17,9 @@
 use assert_cmd::Command;
 use predicates::prelude::*;
 
-/// Construct a `Command` for the `nl` binary from the cargo build.
+/// Construct a `Command` for the `nlm` binary from the cargo build.
 fn nl() -> Command {
-    let mut cmd = Command::cargo_bin("nl").unwrap();
+    let mut cmd = Command::cargo_bin("nlm").unwrap();
     // Ensure no stale config or env vars leak into the test environment.
     cmd.env_remove("NL_EDM_API_KEY");
     cmd.env_remove("NL_SN_API_KEY");
@@ -38,7 +38,9 @@ fn help_top_level() {
     nl().arg("--help")
         .assert()
         .success()
-        .stdout(predicate::str::contains("Newsleopard EDM & Surenotify CLI"));
+        .stdout(predicate::str::contains(
+            "Newsleopard email marketing (EDM) API",
+        ));
 }
 
 #[test]
@@ -46,7 +48,7 @@ fn help_edm() {
     nl().args(["edm", "--help"])
         .assert()
         .success()
-        .stdout(predicate::str::contains("EDM API commands"));
+        .stdout(predicate::str::contains("Newsleopard EDM API"));
 }
 
 #[test]
@@ -54,7 +56,9 @@ fn help_sn() {
     nl().args(["sn", "--help"])
         .assert()
         .success()
-        .stdout(predicate::str::contains("Surenotify API commands"));
+        .stdout(predicate::str::contains(
+            "Surenotify transactional messaging API",
+        ));
 }
 
 #[test]
@@ -71,18 +75,18 @@ fn help_helper() {
         .assert()
         .success()
         .stdout(predicate::str::contains(
-            "High-level orchestration commands",
+            "High-level orchestration workflows",
         ));
 }
 
 #[test]
 fn help_x_alias() {
-    // `nl x` is an alias for `nl helper`
+    // `nlm x` is an alias for `nlm helper`
     nl().args(["x", "--help"])
         .assert()
         .success()
         .stdout(predicate::str::contains(
-            "High-level orchestration commands",
+            "High-level orchestration workflows",
         ));
 }
 
@@ -740,4 +744,48 @@ fn auth_error_stderr_is_json_structure() {
                 .and(predicate::str::contains("\"exit_code\""))
                 .and(predicate::str::contains("3")),
         );
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// 12. Help text contains examples (for AI agent discoverability)
+// ══════════════════════════════════════════════════════════════════════════════
+
+#[test]
+fn help_top_level_has_examples() {
+    nl().arg("--help").assert().success().stdout(
+        predicate::str::contains("EXAMPLES:")
+            .and(predicate::str::contains("ENVIRONMENT VARIABLES:")),
+    );
+}
+
+#[test]
+fn help_mcp_tools_has_examples() {
+    nl().args(["mcp", "tools", "--help"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("EXAMPLE:"));
+}
+
+#[test]
+fn help_mcp_call_has_examples() {
+    nl().args(["mcp", "call", "--help"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("EXAMPLES:"));
+}
+
+#[test]
+fn help_campaign_submit_has_examples() {
+    nl().args(["edm", "campaign", "submit", "--help"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("EXAMPLES:"));
+}
+
+#[test]
+fn help_sn_email_send_has_examples() {
+    nl().args(["sn", "email", "send", "--help"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("EXAMPLES:"));
 }

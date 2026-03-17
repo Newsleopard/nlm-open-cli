@@ -124,7 +124,7 @@ description = "Newsleopard EDM & Surenotify CLI"
 rust-version = "1.75"
 
 [[bin]]
-name = "nl"
+name = "nlm"
 path = "src/main.rs"
 
 [dependencies]
@@ -958,7 +958,7 @@ jobs:
       - run: cargo build --release --target ${{ matrix.target }}
       - uses: softprops/action-gh-release@v2
         with:
-          files: target/${{ matrix.target }}/release/nl*
+          files: target/${{ matrix.target }}/release/nlm*
 ```
 
 ### 7.2 Release 管道

@@ -9,6 +9,16 @@ pub struct EmailArgs {
 #[derive(clap::Subcommand, Debug)]
 pub enum EmailCommand {
     /// Send a transactional email
+    #[command(after_long_help = "\
+EXAMPLES:\n  \
+  # Simple send to one recipient\n  \
+  nlm sn email send --subject 'Order Confirmed' --from-address noreply@acme.com \\\n    \
+    --html '<p>Your order {{order_id}} is confirmed.</p>' --to customer@example.com\n\n  \
+  # Send with substitutions via JSON recipients\n  \
+  nlm sn email send --subject 'Hello {{name}}' --from-address noreply@acme.com \\\n    \
+    --html-file welcome.html \\\n    \
+    --recipients '[{\"address\":\"a@b.com\",\"name\":\"Alice\",\"substitutions\":{\"name\":\"Alice\"}}]'\n\n\
+NOTE: Surenotify uses {{variable_name}} syntax for substitutions.")]
     Send {
         /// Email subject line
         #[arg(long)]

@@ -11,6 +11,21 @@ pub struct CampaignArgs {
 #[derive(clap::Subcommand, Debug)]
 pub enum CampaignCommand {
     /// Submit a campaign for sending
+    #[command(after_long_help = "\
+EXAMPLES:\n  \
+  # Send immediately to list L1\n  \
+  nlm edm campaign submit --name 'March Newsletter' --lists L1 \\\n    \
+    --subject 'March Updates' --from-name 'ACME' --from-address news@acme.com \\\n    \
+    --html-file newsletter.html\n\n  \
+  # Schedule for a specific time\n  \
+  nlm edm campaign submit --name 'Promo' --lists L1,L2 --exclude-lists L3 \\\n    \
+    --subject 'Sale!' --from-name 'Shop' --from-address shop@acme.com \\\n    \
+    --html '<h1>50% Off</h1>' --schedule scheduled \\\n    \
+    --schedule-date '2025-03-20T09:00:00' --schedule-timezone 8\n\n  \
+  # Dry-run to preview the request\n  \
+  nlm edm campaign submit --name Test --lists L1 --subject Hi \\\n    \
+    --from-name Me --from-address me@x.com --html '<p>hi</p>' --dry-run\n\n\
+NOTE: EDM uses ${FIELD_NAME} variable syntax in subject/content.")]
     Submit {
         #[command(flatten)]
         fields: CampaignSubmitFields,
@@ -98,6 +113,7 @@ pub enum CampaignCommand {
     },
 
     /// Check campaign sending status
+    #[command(after_long_help = "EXAMPLE:\n  nlm edm campaign status --sn CAM12345")]
     Status {
         /// Campaign SN
         #[arg(long)]
@@ -106,6 +122,10 @@ pub enum CampaignCommand {
 
     // ── MCP-backed commands ─────────────────────────────
     /// Analyze campaign performance with AI-powered suggestions (via MCP)
+    #[command(
+        after_long_help = "EXAMPLE:\n  nlm edm campaign analyze --sn CAM12345\n\n  \
+        Returns AI-powered performance analysis with actionable suggestions."
+    )]
     Analyze {
         /// Campaign SN
         #[arg(long)]
@@ -113,6 +133,7 @@ pub enum CampaignCommand {
     },
 
     /// Compare 2-5 campaigns side by side (via MCP)
+    #[command(after_long_help = "EXAMPLE:\n  nlm edm campaign compare --sns CAM001 CAM002 CAM003")]
     Compare {
         /// Campaign SNs to compare (2-5)
         #[arg(long, num_args = 2..=5)]
@@ -120,6 +141,7 @@ pub enum CampaignCommand {
     },
 
     /// Pre-flight check before sending a campaign (via MCP)
+    #[command(after_long_help = "EXAMPLE:\n  nlm edm campaign preflight --sn CAM12345")]
     Preflight {
         /// Campaign SN
         #[arg(long)]
@@ -127,6 +149,7 @@ pub enum CampaignCommand {
     },
 
     /// Search campaigns by keyword or criteria (via MCP)
+    #[command(after_long_help = "EXAMPLE:\n  nlm edm campaign find \"March newsletter\"")]
     Find {
         /// Search query
         query: String,

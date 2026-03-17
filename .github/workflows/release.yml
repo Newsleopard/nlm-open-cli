@@ -61,9 +61,9 @@ jobs:
         shell: bash
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          ARCHIVE="nl-v${VERSION}-${{ matrix.target }}.tar.gz"
+          ARCHIVE="nlm-v${VERSION}-${{ matrix.target }}.tar.gz"
           tar czf "$ARCHIVE" \
-            -C "target/${{ matrix.target }}/release" nl \
+            -C "target/${{ matrix.target }}/release" nlm \
             -C "$GITHUB_WORKSPACE" LICENSE-MIT LICENSE-APACHE
           echo "ARCHIVE=$ARCHIVE" >> "$GITHUB_ENV"
 
@@ -72,14 +72,14 @@ jobs:
         shell: pwsh
         run: |
           $VERSION = "$env:GITHUB_REF_NAME" -replace '^v', ''
-          $ARCHIVE = "nl-v${VERSION}-${{ matrix.target }}.zip"
-          Compress-Archive -Path "target/${{ matrix.target }}/release/nl.exe", "LICENSE-MIT", "LICENSE-APACHE" -DestinationPath $ARCHIVE
+          $ARCHIVE = "nlm-v${VERSION}-${{ matrix.target }}.zip"
+          Compress-Archive -Path "target/${{ matrix.target }}/release/nlm.exe", "LICENSE-MIT", "LICENSE-APACHE" -DestinationPath $ARCHIVE
           echo "ARCHIVE=$ARCHIVE" >> $env:GITHUB_ENV
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: nl-${{ matrix.target }}
+          name: nlm-${{ matrix.target }}
           path: ${{ env.ARCHIVE }}
 
   publish:
@@ -94,7 +94,7 @@ jobs:
 
       - name: Generate checksums
         working-directory: dist
-        run: sha256sum nl-v*.* > SHA256SUMS.txt
+        run: sha256sum nlm-v*.* > SHA256SUMS.txt
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
