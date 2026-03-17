@@ -58,6 +58,36 @@ where
     .await
 }
 
+/// Lighter retry for MCP operations (handshake, tool discovery).
+///
+/// Uses a shorter budget (15 s total, 200 ms initial) so that tool listing
+/// fails fast instead of blocking the caller for up to two minutes.
+pub async fn with_mcp_retry<F, Fut, T>(f: F) -> Result<T, NlError>
+where
+    F: Fn() -> Fut,
+    Fut: Future<Output = Result<T, NlError>>,
+{
+    let backoff = ExponentialBackoffBuilder::default()
+        .with_initial_interval(Duration::from_millis(200))
+        .with_max_interval(Duration::from_secs(5))
+        .with_max_elapsed_time(Some(Duration::from_secs(15)))
+        .build();
+
+    backoff::future::retry(backoff, || async {
+        match f().await {
+            Ok(v) => Ok(v),
+            Err(e) => {
+                if is_transient(&e) {
+                    Err(backoff::Error::transient(e))
+                } else {
+                    Err(backoff::Error::permanent(e))
+                }
+            }
+        }
+    })
+    .await
+}
+
 /// Determines whether an `NlError` is transient and should be retried.
 fn is_transient(e: &NlError) -> bool {
     match e {
@@ -147,5 +177,38 @@ mod tests {
         .await;
         assert_eq!(result.unwrap(), 99);
         assert!(attempts.load(Ordering::SeqCst) >= 3);
+    }
+
+    // ── with_mcp_retry ──────────────────────────────────────────────────
+
+    #[tokio::test]
+    async fn test_with_mcp_retry_succeeds_immediately() {
+        let result = with_mcp_retry(|| async { Ok::<_, NlError>(7) }).await;
+        assert_eq!(result.unwrap(), 7);
+    }
+
+    #[tokio::test]
+    async fn test_with_mcp_retry_permanent_error() {
+        let result =
+            with_mcp_retry(|| async { Err::<i32, _>(NlError::Validation("permanent".into())) })
+                .await;
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err().exit_code(), 2);
+    }
+
+    #[tokio::test]
+    async fn test_with_mcp_retry_recovers_after_transient() {
+        let attempts = AtomicU32::new(0);
+        let result = with_mcp_retry(|| async {
+            let n = attempts.fetch_add(1, Ordering::SeqCst);
+            if n < 1 {
+                Err(NlError::Network("transient failure".into()))
+            } else {
+                Ok(42)
+            }
+        })
+        .await;
+        assert_eq!(result.unwrap(), 42);
+        assert!(attempts.load(Ordering::SeqCst) >= 2);
     }
 }

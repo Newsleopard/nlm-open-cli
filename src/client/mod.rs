@@ -13,6 +13,7 @@ pub mod surenotify;
 use reqwest::Client;
 use serde::de::DeserializeOwned;
 use std::collections::HashMap;
+use std::time::Duration;
 
 use crate::error::{DryRunInfo, NlError};
 use rate_limiter::NlRateLimiter;
@@ -38,6 +39,8 @@ impl ApiClient {
     pub fn new(dry_run: bool, verbose: u8) -> Self {
         let http = Client::builder()
             .user_agent(format!("nl-cli/{}", env!("CARGO_PKG_VERSION")))
+            .connect_timeout(Duration::from_secs(10))
+            .timeout(Duration::from_secs(30))
             .build()
             .expect("Failed to create HTTP client");
         Self {

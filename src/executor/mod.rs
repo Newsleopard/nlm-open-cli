@@ -129,7 +129,26 @@ async fn execute_mcp(
 
     match cmd {
         McpCommand::Tools => {
-            let tools = mcp.list_tools().await?;
+            // Show a spinner on stderr so humans/agents see activity.
+            let spinner = if std::io::stderr().is_terminal() {
+                let pb = indicatif::ProgressBar::new_spinner();
+                pb.set_message("Discovering MCP tools...");
+                pb.enable_steady_tick(std::time::Duration::from_millis(120));
+                Some(pb)
+            } else {
+                None
+            };
+
+            let result = mcp.list_tools().await;
+
+            if let Some(pb) = spinner {
+                match &result {
+                    Ok(tools) => pb.finish_with_message(format!("Found {} tools", tools.len())),
+                    Err(_) => pb.finish_with_message("Failed"),
+                }
+            }
+
+            let tools = result?;
             Ok(serde_json::to_value(tools)?)
         }
 
