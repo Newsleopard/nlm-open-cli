@@ -1,0 +1,19 @@
+---
+source: tests/formatter_snapshot_test.rs
+expression: output
+---
+{
+  "schedule": {
+    "timezone": "Asia/Taipei",
+    "type": 1
+  },
+  "sender": {
+    "email": "no-reply@newsleopard.com",
+    "name": "NewsLeopard"
+  },
+  "tracking": {
+    "clicks": true,
+    "opens": true,
+    "unsubscribes": false
+  }
+}

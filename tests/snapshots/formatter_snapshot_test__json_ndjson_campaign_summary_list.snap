@@ -1,0 +1,7 @@
+---
+source: tests/formatter_snapshot_test.rs
+expression: output
+---
+{"id":"camp_001","name":"Welcome Series","open_rate":0.42,"status":"sent"}
+{"click_rate":0.11,"id":"camp_002","name":"Promo Blast","status":"draft"}
+{"click_rate":0.05,"id":"camp_003","name":"Re-engagement","open_rate":0.19,"status":"scheduled"}

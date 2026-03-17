@@ -1,0 +1,6 @@
+---
+source: tests/formatter_snapshot_test.rs
+expression: output
+---
+id,status
+camp_001,sent

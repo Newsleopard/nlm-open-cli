@@ -1,0 +1,8 @@
+---
+source: tests/formatter_snapshot_test.rs
+expression: output
+---
+id,name,open_rate,status,click_rate
+camp_001,Welcome Series,0.42,sent,
+camp_002,Promo Blast,,draft,0.11
+camp_003,Re-engagement,0.19,scheduled,0.05

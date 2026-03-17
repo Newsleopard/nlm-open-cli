@@ -1,0 +1,5 @@
+---
+source: tests/formatter_snapshot_test.rs
+expression: output
+---
+[{"email":"alice@example.com","name":"Alice Chen","subscribed":true,"tags":["vip","newsletter"]},{"email":"bob@example.com","name":"Bob Wang","subscribed":false,"tags":["newsletter"]},{"email":"carol@example.com","name":"Carol Lin","subscribed":true,"tags":[]}]

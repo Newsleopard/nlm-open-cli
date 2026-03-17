@@ -1,0 +1,6 @@
+---
+source: tests/formatter_snapshot_test.rs
+expression: output
+---
+schedule.timezone,schedule.type,sender.email,sender.name,tracking.clicks,tracking.opens,tracking.unsubscribes
+Asia/Taipei,1,no-reply@newsleopard.com,NewsLeopard,true,true,false

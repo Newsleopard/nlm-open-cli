@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-`nl` is a Rust CLI tool wrapping the NewsLeopard EDM API (20 endpoints) and SureNotify API (11+ endpoints) for email marketing and transactional messaging. Binary name: `nl`, crate name: `nl-cli`.
+`nl` is a Rust CLI tool wrapping the NewsLeopard EDM API (20 endpoints) and SureNotify API (14 endpoints) for email marketing and transactional messaging. Binary name: `nl`, crate name: `nl-cli`.
 
-**Status:** Pre-implementation — architecture docs and PRD are finalized in `docs/`, source code is to be built.
+**Status:** Implemented — all modules complete and compiling. Architecture docs and PRD in `docs/`.
 
 ## Build & Development Commands
 
@@ -25,22 +25,23 @@ cargo fmt -- --check                 # Check formatting without modifying
 
 ## Architecture
 
-Layered architecture with static clap derive structs (not dynamic discovery — API surface is fixed at 31 endpoints):
+Layered architecture with static clap derive structs (not dynamic discovery — API surface is fixed at 34 endpoints):
 
 ```
 main.rs → cli/ (clap derive) → executor/ → client/ + formatter/ + helpers/
-                                               ↓
-                                          共用層: config/, types/, error.rs
+                  │                            ↓
+                  └─ config commands ──→  config/ (no API client needed)
+                                         types/, error.rs
 ```
 
 ### Key Layers
 
-- **`cli/`** — Command tree via clap derive. Two subtrees: `edm/` (contacts, campaign, ab_test, report, template, automation, account) and `sn/` (email, sms, webhook, domain)
+- **`cli/`** — Command tree via clap derive. Four subtrees: `edm/` (contacts, campaign, ab_test, report, template, automation, account), `sn/` (email, sms, webhook, sms_webhook, domain), `mcp` (tools, call), `config` (init, set, get, list, profile). Also `helper`/`x` for orchestration workflows
 - **`executor/`** — Routes parsed CLI args → client calls → formatted output
-- **`client/`** — `ApiClient` (shared HTTP + rate limiter + dry-run), `EdmClient` (20 methods), `SureNotifyClient` (11+ methods), `rate_limiter.rs` (governor token bucket), `retry.rs` (backoff)
+- **`client/`** — `ApiClient` (shared HTTP + rate limiter + dry-run), `EdmClient` (20 methods), `SureNotifyClient` (14 methods), `McpClient` (JSON-RPC 2.0 tool discovery/invocation via `mcp.rs`), `rate_limiter.rs` (governor token bucket), `retry.rs` (backoff)
 - **`formatter/`** — 4 output formats: JSON (pretty/compact/NDJSON), Table (tabled + auto-flatten), YAML, CSV
 - **`helpers/`** — Orchestration workflows: `campaign_send`, `import_wait`, `report_export`, `domain_setup`
-- **`config/`** — TOML config at `~/.config/nl/config.toml`, multi-profile, env var overrides
+- **`config/`** — TOML config at `~/.config/nl/config.toml`, multi-profile, env var overrides (`NL_EDM_API_KEY`, `NL_SN_API_KEY`, `NL_FORMAT`, `NL_MCP_URL`)
 - **`types/`** — `edm.rs` and `surenotify.rs` request/response structs with serde rename attributes
 - **`error.rs`** — `NlError` enum with 6 exit codes (0-5), JSON stderr output
 
@@ -66,7 +67,7 @@ Exponential backoff (500ms initial, 30s max, 120s total timeout) on HTTP 429, 5x
 | Layer | Tool | What it covers |
 |-------|------|----------------|
 | Unit | `#[cfg(test)]` | Serialization, config parsing, variable validation |
-| HTTP Mock | `wiremock` | All 31 endpoint request/response, error codes, rate limits |
+| HTTP Mock | `wiremock` | MCP client (handshake, tool calls, errors, retry); EDM/SN tests partial |
 | CLI E2E | `assert_cmd` | Command parsing, exit codes, dry-run, output formats |
 | Snapshot | `insta` | Formatter output stability |
 
@@ -89,6 +90,7 @@ GitHub Actions: `cargo fmt --check` → `cargo clippy` → `cargo test` on every
 
 ## Gotchas
 
+- **`cargo` may not be in PATH** — use `$HOME/.cargo/bin/cargo` if `cargo` command is not found
 - EDM and SureNotify use **different variable syntaxes** — must validate and warn on cross-use
 - Config file permissions must be 600; API keys must never appear in stdout or logs
 - `nl config list` must mask API key values (`****...`)

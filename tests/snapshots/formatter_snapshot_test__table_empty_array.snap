@@ -1,0 +1,5 @@
+---
+source: tests/formatter_snapshot_test.rs
+expression: output
+---
+(empty)

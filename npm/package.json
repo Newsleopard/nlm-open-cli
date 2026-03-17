@@ -1,0 +1,42 @@
+{
+  "name": "@newsleopard/nl-cli",
+  "version": "0.1.0",
+  "description": "CLI for NewsLeopard EDM API and SureNotify transactional messaging",
+  "license": "(MIT OR Apache-2.0)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/newsleopard/nl-cli.git"
+  },
+  "homepage": "https://github.com/newsleopard/nl-cli",
+  "bin": {
+    "nl": "bin/nl"
+  },
+  "scripts": {
+    "postinstall": "node install.js"
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
+  "files": [
+    "install.js",
+    "bin/"
+  ],
+  "keywords": [
+    "newsleopard",
+    "edm",
+    "email",
+    "sms",
+    "surenotify",
+    "cli",
+    "newsletter"
+  ]
+}

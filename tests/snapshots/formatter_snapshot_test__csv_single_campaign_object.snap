@@ -1,0 +1,6 @@
+---
+source: tests/formatter_snapshot_test.rs
+expression: output
+---
+click_rate,id,name,open_rate,schedule.send_at,schedule.type,sent_count,status,subject
+0.07,camp_abc123,Spring Sale Newsletter,0.28,2024-04-01T09:00:00Z,0,15000,draft,Don't miss our Spring Sale!
