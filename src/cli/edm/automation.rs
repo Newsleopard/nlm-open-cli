@@ -9,6 +9,10 @@ pub struct AutomationArgs {
 #[derive(clap::Subcommand, Debug)]
 pub enum AutomationCommand {
     /// Trigger an automation workflow
+    #[command(after_long_help = "\
+EXAMPLE:\n  \
+  nlm edm automation trigger --workflow AUTO001 --event welcome \\\n    \
+    --recipients user@example.com,new@example.com")]
     Trigger {
         /// Workflow identifier
         #[arg(long)]

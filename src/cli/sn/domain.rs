@@ -7,6 +7,9 @@ pub struct DomainArgs {
 #[derive(clap::Subcommand, Debug)]
 pub enum DomainCommand {
     /// Register a new sender domain
+    #[command(after_long_help = "\
+EXAMPLE:\n  \
+  nlm sn domain create --domain mail.example.com")]
     Create {
         /// Domain name (e.g. mail.example.com)
         #[arg(long)]
@@ -14,6 +17,9 @@ pub enum DomainCommand {
     },
 
     /// Verify DNS records for a sender domain
+    #[command(after_long_help = "\
+EXAMPLE:\n  \
+  nlm sn domain verify --domain mail.example.com")]
     Verify {
         /// Domain name to verify
         #[arg(long)]
@@ -21,6 +27,9 @@ pub enum DomainCommand {
     },
 
     /// Remove a sender domain
+    #[command(after_long_help = "\
+EXAMPLE:\n  \
+  nlm sn domain remove --domain mail.example.com")]
     Remove {
         /// Domain name to remove
         #[arg(long)]

@@ -58,6 +58,12 @@ NOTE: Surenotify uses {{variable_name}} syntax for substitutions.")]
     },
 
     /// Query transactional email events
+    #[command(after_long_help = "\
+EXAMPLES:\n  \
+  # Filter by recipient and date range\n  \
+  nlm sn email events --recipient user@example.com --from 2025-01-01 --to 2025-01-31\n\n  \
+  # Look up a specific message by ID\n  \
+  nlm sn email events --id MSG12345")]
     Events {
         /// Filter by message ID (mutually exclusive with --recipient)
         #[arg(long, conflicts_with = "recipient")]

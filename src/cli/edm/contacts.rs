@@ -9,6 +9,7 @@ pub struct ContactsArgs {
 #[derive(clap::Subcommand, Debug)]
 pub enum ContactsCommand {
     /// Create a new contact group
+    #[command(after_long_help = "EXAMPLE:\n  nlm edm contacts create-group --name 'VIP Customers'")]
     CreateGroup {
         /// Group name
         #[arg(long)]
@@ -61,8 +62,9 @@ pub enum ContactsCommand {
     },
 
     /// Import contacts from inline CSV text or a CSV file body
-    #[command(after_long_help = "EXAMPLE:\n  \
-        nlm edm contacts import-text --list-sn L1 --csv-text 'email,name\\na@b.com,Alice'")]
+    #[command(after_long_help = "EXAMPLES:\n  \
+  nlm edm contacts import-text --list-sn L1 --csv-text 'email,name\\na@b.com,Alice'\n  \
+  nlm edm contacts import-text --list-sn L1 --csv-file contacts.csv")]
     ImportText {
         /// Target contact list SN
         #[arg(long)]
@@ -82,6 +84,7 @@ pub enum ContactsCommand {
     },
 
     /// Check the status of a contact import job
+    #[command(after_long_help = "EXAMPLE:\n  nlm edm contacts import-status --import-sn IMP12345")]
     ImportStatus {
         /// Import job SN
         #[arg(long)]
@@ -89,6 +92,10 @@ pub enum ContactsCommand {
     },
 
     /// Remove contacts matching a filter condition
+    #[command(after_long_help = "\
+EXAMPLE:\n  \
+  nlm edm contacts remove --list-sn L1 --field email \\\n    \
+    --operator eq --value old@example.com")]
     Remove {
         /// Target contact list SN
         #[arg(long)]
@@ -109,6 +116,7 @@ pub enum ContactsCommand {
 
     // ── MCP-backed commands ─────────────────────────────
     /// Top-performing contact lists ranked by engagement (via MCP)
+    #[command(after_long_help = "EXAMPLE:\n  nlm edm contacts top-lists --limit 5")]
     TopLists {
         /// Maximum number of lists to return
         #[arg(long)]

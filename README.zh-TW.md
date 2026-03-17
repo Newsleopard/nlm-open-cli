@@ -257,6 +257,7 @@ HTTP 429 與 5xx 錯誤會自動以 exponential backoff 重試（500ms 起始、
 - [產品需求文件 (PRD)](docs/PRD.md) — 完整 API 覆蓋範圍、使用場景、驗收標準
 - [技術架構設計](docs/Architecture.md) — 模組結構、設計模式、依賴
 - [CLI 使用手冊](docs/CLI-USER-GUIDE.md) — 完整指令樹與範例
+- [AI Agent 指南](AGENTS.md) — 為 AI Agent 與自動化設計的 CLI 結構化參考
 - [Newsleopard API Agent Skill](https://github.com/Newsleopard/nlm-open-skills) — AI Agent 技能，協助 AI 程式助手產生 Newsleopard API 整合程式碼（支援 Claude Code、GitHub Copilot、Cursor）
 
 ## 貢獻

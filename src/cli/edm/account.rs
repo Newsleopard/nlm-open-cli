@@ -7,5 +7,8 @@ pub struct AccountArgs {
 #[derive(clap::Subcommand, Debug)]
 pub enum AccountCommand {
     /// Show account balance (email and SMS credits)
+    #[command(after_long_help = "EXAMPLES:\n  \
+  nlm edm account balance\n  \
+  nlm edm account balance --format table")]
     Balance,
 }

@@ -32,6 +32,11 @@ NOTE: EDM uses ${FIELD_NAME} variable syntax in subject/content.")]
     },
 
     /// Submit a one-time campaign to contacts from a file (no stored list)
+    #[command(after_long_help = "\
+EXAMPLE:\n  \
+  nlm edm campaign submit-once --contacts-file contacts.csv \\\n    \
+    --name 'One-time Blast' --subject 'Flash Sale' \\\n    \
+    --from-name Shop --from-address shop@acme.com --html-file promo.html")]
     SubmitOnce {
         /// CSV/Excel file containing recipient contacts
         #[arg(long)]
@@ -99,6 +104,7 @@ NOTE: EDM uses ${FIELD_NAME} variable syntax in subject/content.")]
     },
 
     /// Delete one or more campaigns
+    #[command(after_long_help = "EXAMPLE:\n  nlm edm campaign delete --sns CAM001,CAM002")]
     Delete {
         /// Comma-separated campaign SNs to delete
         #[arg(long)]
@@ -106,6 +112,7 @@ NOTE: EDM uses ${FIELD_NAME} variable syntax in subject/content.")]
     },
 
     /// Pause a sending campaign
+    #[command(after_long_help = "EXAMPLE:\n  nlm edm campaign pause --sn CAM12345")]
     Pause {
         /// Campaign SN
         #[arg(long)]
@@ -156,5 +163,6 @@ NOTE: EDM uses ${FIELD_NAME} variable syntax in subject/content.")]
     },
 
     /// Get the best time to send campaigns (via MCP)
+    #[command(after_long_help = "EXAMPLE:\n  nlm edm campaign best-time")]
     BestTime,
 }

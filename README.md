@@ -257,6 +257,7 @@ HTTP 429 and 5xx errors are retried with exponential backoff (500ms initial, 30s
 ## Documentation
 
 - [CLI User Guide](docs/CLI-USER-GUIDE.md) — Complete command tree with examples
+- [AI Agent Guide](AGENTS.md) — Machine-readable CLI reference for AI agents and automation
 - [Newsleopard API Agent Skill](https://github.com/Newsleopard/nlm-open-skills) — AI agent skill for generating Newsleopard API integration code (supports Claude Code, GitHub Copilot, Cursor)
 
 ## Contributing

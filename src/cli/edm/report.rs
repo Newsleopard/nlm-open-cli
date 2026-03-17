@@ -22,6 +22,7 @@ pub enum ReportCommand {
     },
 
     /// Get metrics for one or more campaigns
+    #[command(after_long_help = "EXAMPLE:\n  nlm edm report metrics --sns CAM001,CAM002")]
     Metrics {
         /// Comma-separated campaign SNs
         #[arg(long)]
@@ -48,6 +49,7 @@ NOTE: Report export is rate-limited to 1 request per 10 seconds.")]
     },
 
     /// Get the download link for an exported report
+    #[command(after_long_help = "EXAMPLE:\n  nlm edm report download-link --sn CAM12345")]
     DownloadLink {
         /// Campaign SN
         #[arg(long)]
@@ -56,6 +58,7 @@ NOTE: Report export is rate-limited to 1 request per 10 seconds.")]
 
     // ── MCP-backed commands ─────────────────────────────
     /// Recent campaigns performance summary (via MCP)
+    #[command(after_long_help = "EXAMPLE:\n  nlm edm report summary --days 7")]
     Summary {
         /// Number of days to look back (default: 30)
         #[arg(long, default_value = "30")]
@@ -63,6 +66,7 @@ NOTE: Report export is rate-limited to 1 request per 10 seconds.")]
     },
 
     /// Per-link click breakdown for a campaign (via MCP)
+    #[command(after_long_help = "EXAMPLE:\n  nlm edm report clicks --sn CAM12345")]
     Clicks {
         /// Campaign SN
         #[arg(long)]

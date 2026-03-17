@@ -46,6 +46,9 @@ EXAMPLES:\n  \
     },
 
     /// Query SMS delivery events
+    #[command(after_long_help = "\
+EXAMPLE:\n  \
+  nlm sn sms events --recipient 0912345678 --country-code 886 --from 2025-01-01")]
     Events {
         /// Filter by message ID
         #[arg(long)]
@@ -81,5 +84,6 @@ EXAMPLES:\n  \
     },
 
     /// List exclusive (dedicated) SMS numbers
+    #[command(after_long_help = "EXAMPLE:\n  nlm sn sms exclusive-number")]
     ExclusiveNumber,
 }

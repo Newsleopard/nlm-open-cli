@@ -9,12 +9,26 @@ pub struct AbTestArgs {
 #[derive(clap::Subcommand, Debug)]
 pub enum AbTestCommand {
     /// Submit an A/B test campaign
+    #[command(after_long_help = "\
+EXAMPLE:\n  \
+  # Test two subject lines on 20% of list, pick winner after 4 hours\n  \
+  nlm edm ab-test submit --name 'Subject Test' --lists L1 \\\n    \
+    --test-on subject --subject-a 'Free Shipping' --subject-b '50% Off' \\\n    \
+    --from-name ACME --from-address news@acme.com --html-file email.html \\\n    \
+    --proportion 20 --test-duration 4 --test-unit hours")]
     Submit {
         #[command(flatten)]
         fields: AbTestSubmitFields,
     },
 
     /// Submit a one-time A/B test campaign to contacts from a file (no stored list)
+    #[command(after_long_help = "\
+EXAMPLE:\n  \
+  nlm edm ab-test submit-once --contacts-file contacts.csv \\\n    \
+    --name 'Content Test' --test-on content \\\n    \
+    --html-content-a-file version_a.html --html-content-b-file version_b.html \\\n    \
+    --subject 'Newsletter' --from-name ACME --from-address news@acme.com \\\n    \
+    --proportion 30 --test-duration 1 --test-unit days")]
     SubmitOnce {
         /// CSV/Excel file containing recipient contacts
         #[arg(long)]
