@@ -2,7 +2,7 @@
 
 **繁體中文** | [English](README.md)
 
-**一個 CLI 搞定 NewsLeopard EDM 與 SureNotify API — 為開發者與 AI Agent 打造。**
+**一個 CLI 搞定 Newsleopard EDM 與 SureNotify API — 為開發者與 AI Agent 打造。**
 
 透過單一命令列工具管理電子報活動、交易型訊息、聯絡人、範本與報告。結構化 JSON 輸出、內建限流、Dry-run 安全預覽。
 
@@ -32,7 +32,7 @@
 ## 前置需求
 
 - [Rust](https://rustup.rs/) 1.75+（從原始碼編譯時需要）或直接下載預編譯執行檔
-- 一個 [NewsLeopard（電子豹）](https://www.newsleopard.com/) 帳戶，並取得 EDM 或 SureNotify API Key
+- 一個 [Newsleopard（電子豹）](https://www.newsleopard.com/) 帳戶，並取得 EDM 或 SureNotify API Key
 
 ## 安裝
 
@@ -177,7 +177,7 @@ sn_api_key = "staging-sn-key"
 | 代碼 | 意義 | 觸發條件 |
 |------|------|----------|
 | 0 | 成功 | 正常回應、dry-run 預覽、204 No Content |
-| 1 | API 錯誤 | HTTP 4xx/5xx（NewsLeopard API 回傳） |
+| 1 | API 錯誤 | HTTP 4xx/5xx（Newsleopard API 回傳） |
 | 2 | 驗證錯誤 | CLI 參數驗證失敗 |
 | 3 | 認證/設定錯誤 | API Key 無效、設定檔缺失或損毀 |
 | 4 | 網路/限流錯誤 | 連線失敗、每日額度用盡 |
@@ -247,7 +247,7 @@ HTTP 429 與 5xx 錯誤會自動以 exponential backoff 重試（500ms 起始、
 - [產品需求文件 (PRD)](docs/PRD.md) — 完整 API 覆蓋範圍、使用場景、驗收標準
 - [技術架構設計](docs/Architecture.md) — 模組結構、設計模式、依賴
 - [CLI 使用手冊](docs/CLI-USER-GUIDE.md) — 完整指令樹與範例
-- [NewsLeopard API Agent Skill](https://github.com/Newsleopard/nlm-open-skills) — AI Agent 技能，協助 AI 程式助手產生 NewsLeopard API 整合程式碼（支援 Claude Code、GitHub Copilot、Cursor）
+- [Newsleopard API Agent Skill](https://github.com/Newsleopard/nlm-open-skills) — AI Agent 技能，協助 AI 程式助手產生 Newsleopard API 整合程式碼（支援 Claude Code、GitHub Copilot、Cursor）
 
 ## 貢獻
 

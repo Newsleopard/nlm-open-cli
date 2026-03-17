@@ -2,7 +2,7 @@
 
 **[繁體中文](README.zh-TW.md)** | English
 
-**One CLI for NewsLeopard EDM and SureNotify APIs — built for developers and AI agents.**
+**One CLI for Newsleopard EDM and SureNotify APIs — built for developers and AI agents.**
 
 Manage email campaigns, transactional messages, contacts, templates, and reports from a single command-line tool. Structured JSON output. Built-in rate limiting. Dry-run safety.
 
@@ -32,7 +32,7 @@ Manage email campaigns, transactional messages, contacts, templates, and reports
 ## Prerequisites
 
 - [Rust](https://rustup.rs/) 1.75+ (for building from source) or download a pre-built binary
-- A [NewsLeopard](https://www.newsleopard.com/) account with an EDM or SureNotify API key
+- A [Newsleopard](https://www.newsleopard.com/) account with an EDM or SureNotify API key
 
 ## Installation
 
@@ -179,7 +179,7 @@ The CLI is designed for scripting and AI agent integration. All output is machin
 | Code | Meaning | Trigger |
 |------|---------|---------|
 | 0 | Success | Normal response, dry-run preview, 204 No Content |
-| 1 | API error | HTTP 4xx/5xx from NewsLeopard API |
+| 1 | API error | HTTP 4xx/5xx from Newsleopard API |
 | 2 | Validation error | CLI argument validation failed |
 | 3 | Auth/config error | Invalid API key, missing or corrupt config |
 | 4 | Network/rate limit | Connection failure, daily quota exhausted |
@@ -247,7 +247,7 @@ HTTP 429 and 5xx errors are retried with exponential backoff (500ms initial, 30s
 ## Documentation
 
 - [CLI User Guide](docs/CLI-USER-GUIDE.md) — Complete command tree with examples
-- [NewsLeopard API Agent Skill](https://github.com/Newsleopard/nlm-open-skills) — AI agent skill for generating NewsLeopard API integration code (supports Claude Code, GitHub Copilot, Cursor)
+- [Newsleopard API Agent Skill](https://github.com/Newsleopard/nlm-open-skills) — AI agent skill for generating Newsleopard API integration code (supports Claude Code, GitHub Copilot, Cursor)
 
 ## Contributing
 
