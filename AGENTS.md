@@ -144,6 +144,10 @@ nlm edm account balance
 
 **Precedence**: env var > CLI flag > profile setting > default
 
+## AI Agent Skills
+
+Run `nlm generate-skills` to generate 35 skill files in `skills/` that teach AI agents how to use every nlm command. Skills cover shared patterns, API groups, helper workflows, recipes, and role-based personas. See `docs/skills.md` for the full index.
+
 ## Key Constraints
 
 - **Variable syntax**: EDM uses `${FIELD_NAME}`, Surenotify uses `{{variable_name}}` — do not mix
