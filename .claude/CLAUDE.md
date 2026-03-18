@@ -19,6 +19,7 @@ cargo test cli_integration_test      # Run CLI integration tests
 cargo clippy -- -D warnings          # Lint (treat warnings as errors)
 cargo fmt                            # Format code
 cargo fmt -- --check                 # Check formatting without modifying
+cargo run -- generate-skills         # Generate AI agent skill files in skills/
 ```
 
 **Rust version:** 1.75+ (edition 2021)
@@ -44,6 +45,7 @@ main.rs → cli/ (clap derive) → executor/ → client/ + formatter/ + helpers/
 - **`config/`** — TOML config at `~/.config/nl/config.toml`, multi-profile, env var overrides (`NL_EDM_API_KEY`, `NL_SN_API_KEY`, `NL_FORMAT`, `NL_MCP_URL`)
 - **`types/`** — `edm.rs` and `surenotify.rs` request/response structs with serde rename attributes
 - **`error.rs`** — `NlError` enum with 6 exit codes (0-5), JSON stderr output
+- **`skills_generator/`** — `nlm generate-skills` command: writes 35 AI agent skill files (`skills/{name}/SKILL.md`) with openclaw-compatible YAML frontmatter. Content modules: `shared`, `edm`, `sn`, `helpers`, `mcp_config`, `recipes`, `personas`, `index`
 
 ### Two API Surfaces
 

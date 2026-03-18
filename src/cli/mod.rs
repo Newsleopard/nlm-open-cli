@@ -1,5 +1,6 @@
-use clap::{ArgAction, Parser, Subcommand, ValueEnum};
 use std::path::PathBuf;
+
+use clap::{ArgAction, Parser, Subcommand, ValueEnum};
 
 pub mod edm;
 pub mod mcp;
@@ -92,6 +93,24 @@ pub enum Command {
         Examples: submit campaign + wait for completion, import contacts + poll status, export report + download file."
     )]
     Helper(HelperArgs),
+
+    /// Generate AI agent skill files for the nlm CLI
+    #[command(
+        name = "generate-skills",
+        long_about = "Generate AI agent skill files (SKILL.md) that teach Claude Code and other AI agents\n\
+        how to use nlm's 34 API endpoints and 4 helper workflows.\n\n\
+        Writes skills/{name}/SKILL.md files and an optional docs/skills.md index.\n\
+        Content follows the openclaw frontmatter format for cross-tool compatibility."
+    )]
+    GenerateSkills {
+        /// Output directory for skill files
+        #[arg(long, default_value = "skills")]
+        output_dir: PathBuf,
+
+        /// Also generate docs/skills.md index
+        #[arg(long, default_value_t = true)]
+        index: bool,
+    },
 }
 
 #[derive(Clone, Copy, Debug, ValueEnum)]

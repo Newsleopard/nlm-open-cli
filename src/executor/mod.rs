@@ -48,6 +48,15 @@ pub async fn execute(cli: NlCli) -> Result<(), NlError> {
         return execute_config(&cfg.command);
     }
 
+    // Handle generate-skills — no API client or config needed.
+    if let Command::GenerateSkills {
+        ref output_dir,
+        index,
+    } = cli.command
+    {
+        return crate::skills_generator::generate(output_dir, index);
+    }
+
     let config = config::load(&cli.profile)?;
     let client = ApiClient::new(cli.dry_run, cli.verbose);
     let format = convert_format(cli.format);
@@ -64,7 +73,7 @@ pub async fn execute(cli: NlCli) -> Result<(), NlError> {
         }
         Command::Mcp(mcp) => execute_mcp(mcp.command, &config, &client).await?,
         Command::Helper(helper) => execute_helper(helper.command, &config, &client).await?,
-        Command::Config(_) => unreachable!(),
+        Command::Config(_) | Command::GenerateSkills { .. } => unreachable!(),
     };
 
     if !cli.quiet {

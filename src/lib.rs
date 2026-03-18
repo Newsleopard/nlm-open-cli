@@ -5,4 +5,5 @@ pub mod error;
 pub mod executor;
 pub mod formatter;
 pub mod helpers;
+pub mod skills_generator;
 pub mod types;
