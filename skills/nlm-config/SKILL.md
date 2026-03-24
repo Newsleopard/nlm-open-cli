@@ -13,7 +13,7 @@ metadata:
 
 # nlm Config — Manage API Keys, Profiles, and Settings
 
-Manage the `nlm` CLI configuration: API keys, output format preferences, MCP server URL,
+Manage the `nlm` CLI configuration: API keys, output format preferences, MCP server base URL,
 and multi-profile support for switching between environments.
 
 **Config file location:** `~/.config/nl/config.toml` (permissions `0600`)
@@ -55,7 +55,7 @@ nlm config set sn_api_key "your-sn-key" --profile staging
 # Set default output format
 nlm config set default_format table
 
-# Set MCP server URL
+# Set MCP server base URL (`nlm` uses the `/mcp` endpoint)
 nlm config set mcp_url "https://mcp.newsleopard.com"
 ```
 
@@ -183,7 +183,7 @@ Environment variables take the highest precedence and override both config file 
 | `NL_SN_API_KEY` | `sn_api_key` | Surenotify API key |
 | `NL_FORMAT` | `default_format` | Output format |
 | `NL_PROFILE` | (profile selector) | Active profile name |
-| `NL_MCP_URL` | `mcp_url` | MCP server URL |
+| `NL_MCP_URL` | `mcp_url` | MCP server base URL (`nlm` uses the `/mcp` endpoint) |
 
 ```bash
 # CI/CD pipeline example — no config file needed

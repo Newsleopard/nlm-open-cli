@@ -18,7 +18,7 @@ inspect tool schemas, and invoke a tool with parameters.
 
 ## Prerequisites
 
-- MCP server URL configured (`nlm config set mcp_url "https://..."`)
+- MCP server base URL configured (`nlm config set mcp_url "https://..."`; `nlm` uses the `/mcp` endpoint)
 - The MCP server must be running and accessible
 
 ---

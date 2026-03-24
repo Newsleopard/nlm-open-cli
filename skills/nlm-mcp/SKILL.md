@@ -23,7 +23,7 @@ The MCP client uses the **JSON-RPC 2.0** protocol to communicate with the server
 
 ## Prerequisites
 
-The MCP server URL must be configured before using these commands:
+The MCP server base URL must be configured before using these commands:
 
 ```bash
 # Set via config
@@ -33,7 +33,13 @@ nlm config set mcp_url "https://mcp.newsleopard.com"
 export NL_MCP_URL="https://mcp.newsleopard.com"
 ```
 
-The default URL is `https://mcp.newsleopard.com` if not explicitly configured.
+The default base URL is `https://mcp.newsleopard.com` if not explicitly configured. `nlm`
+uses the JSON-RPC endpoint at `https://mcp.newsleopard.com/mcp`.
+
+Published MCP endpoints:
+
+- `https://mcp.newsleopard.com/mcp` — JSON-RPC endpoint used by `nlm mcp`
+- `https://mcp.newsleopard.com/sse` — SSE endpoint for compatible MCP clients
 
 ---
 

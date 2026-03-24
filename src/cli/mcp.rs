@@ -5,7 +5,7 @@
     long_about = "MCP (Model Context Protocol) tool discovery and invocation.\n\n\
     AI agents can use 'nlm mcp tools' to list all available tools with their descriptions\n\
     and parameter schemas, then 'nlm mcp call <tool_name>' to invoke any tool.\n\n\
-    Requires NL_MCP_URL to be set (default: https://mcp.newsleopard.com)."
+    Requires NL_MCP_URL to be set (default base URL: https://mcp.newsleopard.com; nlm sends requests to /mcp)."
 )]
 pub struct McpArgs {
     #[command(subcommand)]

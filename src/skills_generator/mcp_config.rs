@@ -40,7 +40,7 @@ The MCP client uses the **JSON-RPC 2.0** protocol to communicate with the server
 
 ## Prerequisites
 
-The MCP server URL must be configured before using these commands:
+The MCP server base URL must be configured before using these commands:
 
 ```bash
 # Set via config
@@ -50,7 +50,13 @@ nlm config set mcp_url "https://mcp.newsleopard.com"
 export NL_MCP_URL="https://mcp.newsleopard.com"
 ```
 
-The default URL is `https://mcp.newsleopard.com` if not explicitly configured.
+The default base URL is `https://mcp.newsleopard.com` if not explicitly configured. `nlm`
+uses the JSON-RPC endpoint at `https://mcp.newsleopard.com/mcp`.
+
+Published MCP endpoints:
+
+- `https://mcp.newsleopard.com/mcp` — JSON-RPC endpoint used by `nlm mcp`
+- `https://mcp.newsleopard.com/sse` — SSE endpoint for compatible MCP clients
 
 ---
 
@@ -184,7 +190,7 @@ nlm mcp call nonexistent_tool --json '{}'
 
 const NLM_CONFIG: &str = r#"# nlm Config — Manage API Keys, Profiles, and Settings
 
-Manage the `nlm` CLI configuration: API keys, output format preferences, MCP server URL,
+Manage the `nlm` CLI configuration: API keys, output format preferences, MCP server base URL,
 and multi-profile support for switching between environments.
 
 **Config file location:** `~/.config/nl/config.toml` (permissions `0600`)
@@ -226,7 +232,7 @@ nlm config set sn_api_key "your-sn-key" --profile staging
 # Set default output format
 nlm config set default_format table
 
-# Set MCP server URL
+# Set MCP server base URL (`nlm` uses the `/mcp` endpoint)
 nlm config set mcp_url "https://mcp.newsleopard.com"
 ```
 
@@ -354,7 +360,7 @@ Environment variables take the highest precedence and override both config file 
 | `NL_SN_API_KEY` | `sn_api_key` | Surenotify API key |
 | `NL_FORMAT` | `default_format` | Output format |
 | `NL_PROFILE` | (profile selector) | Active profile name |
-| `NL_MCP_URL` | `mcp_url` | MCP server URL |
+| `NL_MCP_URL` | `mcp_url` | MCP server base URL (`nlm` uses the `/mcp` endpoint) |
 
 ```bash
 # CI/CD pipeline example — no config file needed

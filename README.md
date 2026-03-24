@@ -165,7 +165,12 @@ sn_api_key = "staging-sn-key"
 | `NL_SN_API_KEY` | Surenotify API key |
 | `NL_PROFILE` | Active profile name (default: `default`) |
 | `NL_FORMAT` | Default output format (default: `json`) |
-| `NL_MCP_URL` | MCP server URL (default: `https://mcp.newsleopard.com`) |
+| `NL_MCP_URL` | MCP server base URL (default: `https://mcp.newsleopard.com`; `nlm` uses the `/mcp` endpoint) |
+
+Published MCP endpoints:
+
+- `https://mcp.newsleopard.com/mcp` — JSON-RPC endpoint used by `nlm mcp`
+- `https://mcp.newsleopard.com/sse` — SSE endpoint for compatible MCP clients
 
 ## Global Flags
 

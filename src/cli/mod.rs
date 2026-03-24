@@ -28,7 +28,7 @@ ENVIRONMENT VARIABLES:\n  \
   NL_SN_API_KEY     Surenotify API key (overrides config file)\n  \
   NL_FORMAT         Default output format (json|table|yaml|csv)\n  \
   NL_PROFILE        Config profile name (default: \"default\")\n  \
-  NL_MCP_URL        MCP server URL",
+  NL_MCP_URL        MCP server base URL (nlm uses the /mcp endpoint)",
     version
 )]
 pub struct NlCli {
@@ -75,7 +75,7 @@ pub enum Command {
         long_about = "MCP (Model Context Protocol) tool discovery and invocation.\n\n\
         AI agents can use 'nlm mcp tools' to list all available tools with their descriptions\n\
         and parameter schemas, then 'nlm mcp call <tool_name>' to invoke any tool.\n\n\
-        Requires NL_MCP_URL to be configured (default: https://mcp.newsleopard.com)."
+        Requires NL_MCP_URL to be configured (default base URL: https://mcp.newsleopard.com; nlm sends requests to /mcp)."
     )]
     Mcp(mcp::McpArgs),
 

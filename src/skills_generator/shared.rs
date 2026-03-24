@@ -257,7 +257,7 @@ Non-transient errors (4xx other than 429) are permanent failures with no retry.
 | `NL_SN_API_KEY` | Surenotify API key | `nlm config set sn_api_key` |
 | `NL_FORMAT` | Default output format | `--format` flag |
 | `NL_PROFILE` | Active config profile name | `--profile` flag |
-| `NL_MCP_URL` | MCP server URL for tool discovery | `nlm config set mcp_url` |
+| `NL_MCP_URL` | MCP server base URL for tool discovery (`nlm` uses the `/mcp` endpoint) | `nlm config set mcp_url` |
 
 ### Precedence Order (highest to lowest)
 

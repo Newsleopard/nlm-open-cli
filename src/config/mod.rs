@@ -74,7 +74,7 @@ impl ResolvedConfig {
         })
     }
 
-    /// Returns the MCP server URL, falling back to the default.
+    /// Returns the MCP server base URL, falling back to the default.
     pub fn mcp_url(&self) -> &str {
         self.mcp_url
             .as_deref()
