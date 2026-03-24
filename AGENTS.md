@@ -140,9 +140,18 @@ nlm edm account balance
 | `NL_SN_API_KEY` | Surenotify API key | config file |
 | `NL_FORMAT` | Default output format | `--format` flag |
 | `NL_PROFILE` | Active profile name | `--profile` flag |
-| `NL_MCP_URL` | MCP server URL | config file |
+| `NL_MCP_URL` | MCP server base URL (`nlm` uses the `/mcp` endpoint) | config file |
 
 **Precedence**: env var > CLI flag > profile setting > default
+
+Published MCP endpoints:
+
+- `https://mcp.newsleopard.com/mcp` — JSON-RPC endpoint used by `nlm mcp`
+- `https://mcp.newsleopard.com/sse` — SSE endpoint for compatible MCP clients
+
+## AI Agent Skills
+
+Run `nlm generate-skills` to generate 35 skill files in `skills/` that teach AI agents how to use every nlm command. Skills cover shared patterns, API groups, helper workflows, recipes, and role-based personas. See `docs/skills.md` for the full index.
 
 ## Key Constraints
 

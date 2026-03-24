@@ -164,6 +164,12 @@ sn_api_key = "staging-sn-key"
 | `NL_SN_API_KEY` | Surenotify API Key |
 | `NL_PROFILE` | 啟用的 Profile 名稱（預設：`default`） |
 | `NL_FORMAT` | 預設輸出格式（預設：`json`） |
+| `NL_MCP_URL` | MCP 伺服器基底 URL（預設：`https://mcp.newsleopard.com`；`nlm` 會使用 `/mcp` endpoint） |
+
+公開的 MCP endpoints：
+
+- `https://mcp.newsleopard.com/mcp` — `nlm mcp` 使用的 JSON-RPC endpoint
+- `https://mcp.newsleopard.com/sse` — 給相容的 MCP client 使用的 SSE endpoint
 
 ## 全域參數
 

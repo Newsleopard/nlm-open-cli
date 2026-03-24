@@ -13,7 +13,7 @@ use super::retry::with_mcp_retry;
 use super::ApiClient;
 use crate::error::NlError;
 
-/// Default MCP server URL.
+/// Default MCP server base URL. The client sends JSON-RPC requests to `/mcp`.
 pub const DEFAULT_MCP_URL: &str = "https://mcp.newsleopard.com";
 
 /// MCP JSON-RPC request envelope.

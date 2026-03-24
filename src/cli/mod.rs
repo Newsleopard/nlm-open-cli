@@ -1,5 +1,6 @@
-use clap::{ArgAction, Parser, Subcommand, ValueEnum};
 use std::path::PathBuf;
+
+use clap::{ArgAction, Parser, Subcommand, ValueEnum};
 
 pub mod edm;
 pub mod mcp;
@@ -27,7 +28,7 @@ ENVIRONMENT VARIABLES:\n  \
   NL_SN_API_KEY     Surenotify API key (overrides config file)\n  \
   NL_FORMAT         Default output format (json|table|yaml|csv)\n  \
   NL_PROFILE        Config profile name (default: \"default\")\n  \
-  NL_MCP_URL        MCP server URL",
+  NL_MCP_URL        MCP server base URL (nlm uses the /mcp endpoint)",
     version
 )]
 pub struct NlCli {
@@ -74,7 +75,7 @@ pub enum Command {
         long_about = "MCP (Model Context Protocol) tool discovery and invocation.\n\n\
         AI agents can use 'nlm mcp tools' to list all available tools with their descriptions\n\
         and parameter schemas, then 'nlm mcp call <tool_name>' to invoke any tool.\n\n\
-        Requires NL_MCP_URL to be configured (default: https://mcp.newsleopard.com)."
+        Requires NL_MCP_URL to be configured (default base URL: https://mcp.newsleopard.com; nlm sends requests to /mcp)."
     )]
     Mcp(mcp::McpArgs),
 
@@ -92,6 +93,24 @@ pub enum Command {
         Examples: submit campaign + wait for completion, import contacts + poll status, export report + download file."
     )]
     Helper(HelperArgs),
+
+    /// Generate AI agent skill files for the nlm CLI
+    #[command(
+        name = "generate-skills",
+        long_about = "Generate AI agent skill files (SKILL.md) that teach Claude Code and other AI agents\n\
+        how to use nlm's 34 API endpoints and 4 helper workflows.\n\n\
+        Writes skills/{name}/SKILL.md files and an optional docs/skills.md index.\n\
+        Content follows the openclaw frontmatter format for cross-tool compatibility."
+    )]
+    GenerateSkills {
+        /// Output directory for skill files
+        #[arg(long, default_value = "skills")]
+        output_dir: PathBuf,
+
+        /// Also generate docs/skills.md index
+        #[arg(long, default_value_t = true)]
+        index: bool,
+    },
 }
 
 #[derive(Clone, Copy, Debug, ValueEnum)]

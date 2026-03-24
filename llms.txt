@@ -1,0 +1,169 @@
+# nlm — Newsleopard CLI
+
+> Agent-ready CLI for the Newsleopard EDM API and Surenotify transactional messaging API — 34 REST endpoints, 2 MCP utility commands, helper workflows, and structured output.
+
+`nlm` is a Rust CLI that wraps two Newsleopard REST APIs into a single binary. It provides JSON/Table/YAML/CSV output, built-in rate limiting, exponential backoff retry, dry-run safety, multi-profile configuration, MCP tool discovery/invocation, and AI agent skill generation.
+
+REST API coverage is 34 endpoints total: 20 EDM endpoints and 14 Surenotify endpoints. Separately, the CLI also includes 2 MCP utility commands, local config commands, helper workflows, and the `nlm generate-skills` command.
+
+## Install
+
+```bash
+npm install -g @newsleopard/nlm-cli   # npm
+cargo install nlm-cli                  # cargo
+brew install newsleopard/tap/nlm       # homebrew
+```
+
+Pre-built binaries: <https://github.com/Newsleopard/nlm-open-cli/releases>
+
+## Quick Start
+
+```bash
+nlm config init              # Interactive setup
+nlm edm account balance      # Check credits
+nlm edm contacts list-groups # List contact groups
+```
+
+## Two API Surfaces
+
+| API | Base URL | Auth Variable | Purpose |
+|-----|----------|---------------|---------|
+| EDM | `api.newsleopard.com` | `NL_EDM_API_KEY` | Bulk email marketing — campaigns, contacts, reports, templates, A/B tests, automations (20 endpoints) |
+| Surenotify | `mail.surenotifyapi.com` | `NL_SN_API_KEY` | Transactional email and SMS — send messages, webhooks, domain verification (14 endpoints) |
+
+## Authentication
+
+Config file at `~/.config/nl/config.toml`, or environment variables:
+
+```bash
+export NL_EDM_API_KEY="your-edm-key"
+export NL_SN_API_KEY="your-sn-key"
+export NL_MCP_URL="https://mcp.newsleopard.com"   # Optional MCP host override; nlm uses the /mcp endpoint
+```
+
+Precedence: environment variable > CLI flag > profile setting > default.
+
+Multi-profile support: `nlm config set edm_api_key "..." --profile staging`
+
+Use `NL_MCP_URL` when `nlm mcp` should point at a non-default MCP server.
+
+Published MCP endpoints:
+
+- `https://mcp.newsleopard.com/mcp` — JSON-RPC endpoint used by `nlm mcp`
+- `https://mcp.newsleopard.com/sse` — SSE endpoint for compatible MCP clients
+
+## Commands
+
+### REST Command Groups (34 endpoints total)
+
+| Group | Description | Endpoints |
+|-------|-------------|-----------|
+| `nlm edm contacts` | Contact group management (create, list, import, delete) | 6 |
+| `nlm edm campaign` | Email campaign management (submit, status, pause, delete) | 5 |
+| `nlm edm ab-test` | A/B test campaigns | 2 |
+| `nlm edm report` | Campaign reports (list, metrics, export, download) | 4 |
+| `nlm edm template` | Template management (list, get) | 2 |
+| `nlm edm automation` | Automation script triggers | 1 |
+| `nlm edm account` | Account info (balance) | 1 |
+| `nlm sn email` | Transactional email (send, query events) | 2 |
+| `nlm sn sms` | SMS (send, query events, dedicated numbers) | 3 |
+| `nlm sn webhook` | Email webhook CRUD | 3 |
+| `nlm sn sms-webhook` | SMS webhook CRUD | 3 |
+| `nlm sn domain` | Sender domain verification (create, verify, remove) | 3 |
+
+### Non-REST CLI Groups
+
+| Group | Description | Scope |
+|-------|-------------|-------|
+| `nlm mcp` | MCP tool discovery and invocation for AI agents | 2 MCP utility commands |
+| `nlm config` | Config file management (init, set, get, list, profile) | Local CLI configuration |
+| `nlm helper` | Multi-step orchestration workflows | High-level workflows built on multiple API calls |
+| `nlm generate-skills` | Generate AI agent skill files in `skills/` | Skill generation utility |
+
+### Helper Workflows
+
+| Command | Description |
+|---------|-------------|
+| `nlm helper campaign-send --name N --lists L --subject S ... --wait` | Submit campaign + wait for completion |
+| `nlm helper import-and-wait --list-sn SN --file F` | Import contacts + poll until done |
+| `nlm helper report-download --sn SN --output FILE` | Export report + download file |
+| `nlm helper domain-setup --domain D --auto-verify-after 60` | Create domain + verify DNS |
+
+## Global Flags
+
+```
+--format <json|table|yaml|csv>   Output format (default: json, env: NL_FORMAT)
+--profile <NAME>                 Config profile (default: default, env: NL_PROFILE)
+--dry-run                        Preview request without executing
+--page-all                       Stream paginated results as NDJSON
+-v, --verbose                    Show request/response details (stackable: -vv)
+-q, --quiet                      Errors only
+```
+
+Piping behavior: JSON auto-switches to compact when stdout is piped. `--page-all` streams NDJSON (one JSON object per line).
+
+## Output & Scripting
+
+Exit codes: 0 = success, 1 = API error, 2 = validation, 3 = auth/config, 4 = network/rate-limit, 5 = I/O.
+
+Errors are JSON on stderr:
+
+```json
+{"error": {"type": "api", "message": "API error 400: [40012] Insufficient balance", "exit_code": 1}}
+```
+
+Examples:
+
+```bash
+nlm edm report metrics --sns SN1 -q | jq '.open_rate'
+nlm edm contacts list-groups --page-all -q | jq 'select(.openedRate > 0.3)'
+nlm edm campaign submit --name "March Newsletter" --dry-run
+```
+
+## Variable Syntax
+
+EDM and Surenotify use different variable syntaxes — do not mix them:
+
+| API | Syntax | Example |
+|-----|--------|---------|
+| EDM | `${FIELD_NAME}` | `${NAME}`, `${ORDER_ID}` |
+| Surenotify | `{{variable_name}}` | `{{name}}`, `{{order_id}}` |
+
+The CLI detects and warns on cross-use.
+
+## Rate Limits
+
+Built-in token bucket rate limiting:
+
+| Limit | Value | Affected Commands |
+|-------|-------|-------------------|
+| EDM general | 2 req/s | All `nlm edm` commands |
+| Report export | 1 req/10s | `nlm edm report export` |
+| SN recipients | 100 per request | `nlm sn email send`, `nlm sn sms send` |
+
+HTTP 429 and 5xx errors are retried with exponential backoff (500ms initial, 30s max, 120s total timeout).
+
+## Key Constraints
+
+- Config file `~/.config/nl/config.toml` has 600 permissions; API keys never appear in stdout
+- SMS content must include company name (NCC regulatory requirement)
+- Surenotify max 100 recipients per request, 100 chars per variable value
+
+## AI Agent Skills
+
+Run `nlm generate-skills` to generate 35 skill files in `skills/` that teach AI agents how to use every nlm command — covering shared patterns, API groups, helper workflows, recipes, and role-based personas.
+
+## Docs
+
+- [AGENTS.md](AGENTS.md): Machine-readable command tree with all 34 endpoints, flags, and common tasks — optimized for AI agent consumption
+- [CLI User Guide](docs/CLI-USER-GUIDE.md): Complete command reference with examples (Traditional Chinese)
+- [Install Guide](docs/install.md): Installation instructions for humans and AI agents
+- [AI Agent Skills Index](docs/skills.md): Index of 35 generated skill files for agent integration
+
+## Optional
+
+- [README](README.md): Human-readable project overview with badges and quick start
+- [README (繁體中文)](README.zh-TW.md): Traditional Chinese version
+- [Contributing](CONTRIBUTING.md): Development setup, code style, PR guidelines
+- [Architecture](docs/internal/Architecture.md): Internal module structure and design patterns
+- [PRD](docs/internal/PRD.md): Product requirements and acceptance criteria
