@@ -26,3 +26,6 @@ Thumbs.db
 # npm: downloaded native binary (wrapper scripts are tracked, binary is not)
 npm/bin/nlm-binary
 npm/bin/nlm-binary.exe
+
+# Internal docs (not for public distribution)
+docs/internal/
