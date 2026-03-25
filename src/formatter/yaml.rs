@@ -2,16 +2,16 @@ use crate::error::NlError;
 
 /// Format data as YAML.
 pub fn format_yaml(data: &serde_json::Value) -> Result<String, NlError> {
-    serde_yml::to_string(data).map_err(|e| NlError::Validation(e.to_string()))
+    serde_norway::to_string(data).map_err(|e| NlError::Validation(e.to_string()))
 }
 
 /// Format a YAML page with `---` separator between pages.
 ///
-/// The first page uses the standard YAML document start (`---` emitted by serde_yml).
+/// The first page uses the standard YAML document start (`---` emitted by serde_norway).
 /// Subsequent pages prepend an explicit `---` separator to delimit documents.
 #[allow(dead_code)]
 pub fn format_yaml_page(data: &serde_json::Value, is_first_page: bool) -> Result<String, NlError> {
-    let yaml = serde_yml::to_string(data).map_err(|e| NlError::Validation(e.to_string()))?;
+    let yaml = serde_norway::to_string(data).map_err(|e| NlError::Validation(e.to_string()))?;
     if is_first_page {
         Ok(yaml)
     } else {
