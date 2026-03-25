@@ -83,6 +83,18 @@ pub async fn execute(cli: NlCli) -> Result<(), NlError> {
     Ok(())
 }
 
+/// Returns a human-readable status for a potentially sensitive config key,
+/// without exposing its actual value.
+fn describe_sensitive_config_key(key: &str, profile: Option<&str>) -> Result<String, NlError> {
+    // We rely on `get_value`'s "(not set)" convention but never print the value itself.
+    let raw = config::get_value(key, profile)?;
+    if raw == "(not set)" {
+        Ok(format!("{key}: (not set)"))
+    } else {
+        Ok(format!("{key}: (set; value hidden)"))
+    }
+}
+
 /// Converts the CLI `OutputFormat` to the formatter's `Format`.
 fn convert_format(f: OutputFormat) -> Format {
     match f {
@@ -104,8 +116,18 @@ fn execute_config(cmd: &ConfigCommand) -> Result<(), NlError> {
             profile,
         } => config::set_value(key, value, profile.as_deref()),
         ConfigCommand::Get { key, profile } => {
-            let val = config::get_value(key, profile.as_deref())?;
-            println!("{val}");
+            match key.as_str() {
+                // Never print API keys (even masked); only report whether they are set.
+                "edm_api_key" | "sn_api_key" => {
+                    let status = describe_sensitive_config_key(key, profile.as_deref())?;
+                    println!("{status}");
+                }
+                // Non-sensitive keys can still be printed normally.
+                _ => {
+                    let val = config::get_value(key, profile.as_deref())?;
+                    println!("{val}");
+                }
+            }
             Ok(())
         }
         ConfigCommand::List => {
