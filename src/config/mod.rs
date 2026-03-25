@@ -41,6 +41,24 @@ pub struct Profile {
     pub mcp_url: Option<String>,
 }
 
+impl Profile {
+    /// Returns a masked display string for the EDM API key.
+    fn masked_edm_api_key(&self) -> String {
+        match &self.edm_api_key {
+            Some(key) => mask_value(key),
+            None => "(not set)".to_string(),
+        }
+    }
+
+    /// Returns a masked display string for the SN API key.
+    fn masked_sn_api_key(&self) -> String {
+        match &self.sn_api_key {
+            Some(key) => mask_value(key),
+            None => "(not set)".to_string(),
+        }
+    }
+}
+
 /// Resolved configuration after merging profile values with env var overrides.
 ///
 /// This is the struct that the rest of the application uses.
@@ -306,16 +324,8 @@ pub fn get_value(key: &str, profile: Option<&str>) -> Result<String, NlError> {
         .ok_or_else(|| NlError::Config(format!("Profile '{profile_name}' not found")))?;
 
     let value = match key {
-        "edm_api_key" => prof
-            .edm_api_key
-            .as_deref()
-            .map(mask_value)
-            .unwrap_or_else(|| "(not set)".to_string()),
-        "sn_api_key" => prof
-            .sn_api_key
-            .as_deref()
-            .map(mask_value)
-            .unwrap_or_else(|| "(not set)".to_string()),
+        "edm_api_key" => prof.masked_edm_api_key(),
+        "sn_api_key" => prof.masked_sn_api_key(),
         "default_format" => prof
             .default_format
             .clone()
@@ -349,18 +359,10 @@ pub fn list_all() -> Result<String, NlError> {
         let prof = &config.profiles[name];
         output.push_str(&format!("[{name}]\n"));
 
-        let edm_display = prof
-            .edm_api_key
-            .as_deref()
-            .map(mask_value)
-            .unwrap_or_else(|| "(not set)".to_string());
+        let edm_display = prof.masked_edm_api_key();
         output.push_str(&format!("  edm_api_key    = {edm_display}\n"));
 
-        let sn_display = prof
-            .sn_api_key
-            .as_deref()
-            .map(mask_value)
-            .unwrap_or_else(|| "(not set)".to_string());
+        let sn_display = prof.masked_sn_api_key();
         output.push_str(&format!("  sn_api_key     = {sn_display}\n"));
 
         let format_display = prof.default_format.as_deref().unwrap_or("(not set)");
@@ -586,11 +588,7 @@ default_format = "table"
         );
 
         let profile = &config.profiles["default"];
-        let masked = profile
-            .edm_api_key
-            .as_deref()
-            .map(mask_value)
-            .unwrap_or_else(|| "(not set)".to_string());
+        let masked = profile.masked_edm_api_key();
         assert_eq!(masked, "****...abc");
     }
 
