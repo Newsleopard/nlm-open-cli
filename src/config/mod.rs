@@ -307,7 +307,7 @@ pub fn set_value(key: &str, value: &str, profile: Option<&str>) -> Result<(), Nl
 
 /// Gets a config value, masking API keys for security.
 ///
-/// API keys are displayed as `****...` followed by the last 3 characters.
+/// API keys are displayed as `****...` followed by the last 2 characters.
 /// If `profile` is `None`, defaults to `"default"`.
 pub fn get_value(key: &str, profile: Option<&str>) -> Result<String, NlError> {
     let profile_name = profile.unwrap_or("default");
@@ -410,7 +410,7 @@ pub fn profile_list() -> Result<Vec<String>, NlError> {
 /// Masks an API key for display: shows `****...` plus the last 2 characters.
 ///
 /// Keys shorter than 4 characters are fully masked as `****`.
-fn mask_value(val: &str) -> String {
+pub(crate) fn mask_value(val: &str) -> String {
     let char_count = val.chars().count();
     if char_count <= 3 {
         "****".to_string()
@@ -663,5 +663,71 @@ default_format = "table"
             mcp_url: None,
         };
         assert_eq!(resolved.default_format, "json");
+    }
+
+    #[test]
+    fn test_mask_value_unicode() {
+        // Multibyte UTF-8 characters must not panic or produce garbled output.
+        assert_eq!(mask_value("你好世界測試"), "****...測試");
+        assert_eq!(mask_value("🔑🔒🔓🔐"), "****...🔓🔐");
+    }
+
+    #[test]
+    fn test_masked_api_key_not_set() {
+        let profile = Profile {
+            edm_api_key: None,
+            sn_api_key: None,
+            default_format: None,
+            mcp_url: None,
+        };
+        assert_eq!(profile.masked_edm_api_key(), "(not set)");
+        assert_eq!(profile.masked_sn_api_key(), "(not set)");
+    }
+
+    #[test]
+    fn test_masked_api_key_with_value() {
+        let profile = Profile {
+            edm_api_key: Some("my-edm-key-abc".to_string()),
+            sn_api_key: Some("sn-key-xyz".to_string()),
+            default_format: None,
+            mcp_url: None,
+        };
+        assert_eq!(profile.masked_edm_api_key(), "****...bc");
+        assert_eq!(profile.masked_sn_api_key(), "****...yz");
+    }
+
+    #[test]
+    fn test_named_profile_overrides_default() {
+        // Verifies the 3-layer config loading: [default] → [named] → env vars.
+        // Named profile values should override default; None fields fall back.
+        let toml_str = r#"
+[default]
+edm_api_key = "default-edm"
+sn_api_key = "default-sn"
+default_format = "json"
+
+[staging]
+edm_api_key = "staging-edm"
+default_format = "table"
+"#;
+        let config: ConfigFile = toml::from_str(toml_str).unwrap();
+
+        // Simulate load() layer 1 (default) + layer 2 (staging) without env vars.
+        let default_profile = &config.profiles["default"];
+        let staging_profile = &config.profiles["staging"];
+
+        let mut edm_api_key = default_profile.edm_api_key.clone();
+        let mut sn_api_key = default_profile.sn_api_key.clone();
+        let mut default_format = default_profile.default_format.clone();
+
+        edm_api_key = staging_profile.edm_api_key.clone().or(edm_api_key);
+        sn_api_key = staging_profile.sn_api_key.clone().or(sn_api_key);
+        default_format = staging_profile.default_format.clone().or(default_format);
+
+        // staging overrides edm_api_key and default_format
+        assert_eq!(edm_api_key.as_deref(), Some("staging-edm"));
+        assert_eq!(default_format.as_deref(), Some("table"));
+        // sn_api_key falls back to default (staging has None)
+        assert_eq!(sn_api_key.as_deref(), Some("default-sn"));
     }
 }

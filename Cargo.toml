@@ -1,6 +1,6 @@
 [package]
 name = "nlm-cli"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 description = "CLI for Newsleopard EDM API and Surenotify transactional messaging API"
 rust-version = "1.75"

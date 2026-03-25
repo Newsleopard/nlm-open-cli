@@ -638,12 +638,12 @@ fn dry_run_masks_short_api_key() {
 }
 
 #[test]
-fn dry_run_masks_key_showing_last_three() {
+fn dry_run_masks_key_showing_suffix() {
     nl().args(["edm", "account", "balance", "--dry-run"])
         .env("NL_EDM_API_KEY", "secret-key-XYZ")
         .assert()
         .success()
-        .stderr(predicate::str::contains("****...XYZ"));
+        .stderr(predicate::str::contains("****...YZ"));
 }
 
 // ══════════════════════════════════════════════════════════════════════════════

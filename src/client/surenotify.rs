@@ -581,7 +581,7 @@ mod tests {
             NlError::DryRun(info) => {
                 assert_eq!(info.method, "POST");
                 assert!(info.url.ends_with("/v1/messages"));
-                assert_eq!(info.headers["x-api-key"], "****...123");
+                assert_eq!(info.headers["x-api-key"], "****...23");
                 let body = info.body.unwrap();
                 assert_eq!(body["subject"], "Test");
             }

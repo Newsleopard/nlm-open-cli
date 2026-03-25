@@ -15,6 +15,7 @@ use serde::de::DeserializeOwned;
 use std::collections::HashMap;
 use std::time::Duration;
 
+use crate::config::mask_value;
 use crate::error::{DryRunInfo, NlError};
 use rate_limiter::NlRateLimiter;
 
@@ -64,7 +65,7 @@ impl ApiClient {
     ) -> Option<NlError> {
         if self.dry_run {
             let mut headers = HashMap::new();
-            headers.insert("x-api-key".to_string(), mask_api_key(api_key));
+            headers.insert("x-api-key".to_string(), mask_value(api_key));
             headers.insert("content-type".to_string(), "application/json".to_string());
             Some(NlError::DryRun(Box::new(DryRunInfo {
                 method: method.to_string(),
@@ -95,15 +96,6 @@ impl ApiClient {
                 tracing::debug!("Response body: {}", body);
             }
         }
-    }
-}
-
-/// Masks an API key for safe display: shows only the last 3 characters.
-pub fn mask_api_key(key: &str) -> String {
-    if key.len() <= 3 {
-        "****".to_string()
-    } else {
-        format!("****...{}", &key[key.len() - 3..])
     }
 }
 
@@ -166,27 +158,6 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_mask_api_key_long() {
-        assert_eq!(mask_api_key("abcdefghij"), "****...hij");
-    }
-
-    #[test]
-    fn test_mask_api_key_short() {
-        assert_eq!(mask_api_key("ab"), "****");
-        assert_eq!(mask_api_key("abc"), "****");
-    }
-
-    #[test]
-    fn test_mask_api_key_empty() {
-        assert_eq!(mask_api_key(""), "****");
-    }
-
-    #[test]
-    fn test_mask_api_key_four_chars() {
-        assert_eq!(mask_api_key("abcd"), "****...bcd");
-    }
-
-    #[test]
     fn test_check_dry_run_active() {
         let client = ApiClient::new(true, 0);
         let result = client.check_dry_run(
@@ -200,7 +171,7 @@ mod tests {
             NlError::DryRun(info) => {
                 assert_eq!(info.method, "POST");
                 assert!(info.url.contains("/v1/campaign/normal/submit"));
-                assert_eq!(info.headers["x-api-key"], "****...123");
+                assert_eq!(info.headers["x-api-key"], "****...23");
                 assert!(info.body.is_some());
             }
             _ => panic!("Expected DryRun error"),
