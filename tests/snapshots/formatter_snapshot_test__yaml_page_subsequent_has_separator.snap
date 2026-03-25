@@ -8,7 +8,7 @@ id: camp_abc123
 name: Spring Sale Newsletter
 open_rate: 0.28
 schedule:
-  send_at: '2024-04-01T09:00:00Z'
+  send_at: 2024-04-01T09:00:00Z
   type: 0
 sent_count: 15000
 status: draft
