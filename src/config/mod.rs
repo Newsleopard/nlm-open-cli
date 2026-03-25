@@ -19,6 +19,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::error::NlError;
 
+const VALID_FORMATS: &[&str] = &["json", "table", "yaml", "csv"];
+
 /// The full TOML configuration file structure.
 ///
 /// Each key under the top level is a profile name (e.g. `[default]`, `[staging]`).
@@ -153,18 +155,10 @@ pub fn load(profile_name: &str) -> Result<ResolvedConfig, NlError> {
     // Layer 2: Named profile (if not "default").
     if profile_name != "default" {
         if let Some(profile) = config_file.profiles.get(profile_name) {
-            if profile.edm_api_key.is_some() {
-                edm_api_key = profile.edm_api_key.clone();
-            }
-            if profile.sn_api_key.is_some() {
-                sn_api_key = profile.sn_api_key.clone();
-            }
-            if profile.default_format.is_some() {
-                default_format = profile.default_format.clone();
-            }
-            if profile.mcp_url.is_some() {
-                mcp_url = profile.mcp_url.clone();
-            }
+            edm_api_key = profile.edm_api_key.clone().or(edm_api_key);
+            sn_api_key = profile.sn_api_key.clone().or(sn_api_key);
+            default_format = profile.default_format.clone().or(default_format);
+            mcp_url = profile.mcp_url.clone().or(mcp_url);
         }
         // It's not an error if a profile doesn't exist in the file —
         // env vars may provide the keys.
@@ -243,7 +237,7 @@ pub fn init_interactive() -> Result<(), NlError> {
         .interact_text()
         .map_err(|e| NlError::Io(std::io::Error::other(e)))?;
 
-    let format_options = &["json", "table", "yaml", "csv"];
+    let format_options = VALID_FORMATS;
     let format_idx = Select::new()
         .with_prompt("Default output format")
         .items(format_options)
@@ -291,7 +285,7 @@ pub fn set_value(key: &str, value: &str, profile: Option<&str>) -> Result<(), Nl
         "edm_api_key" => prof.edm_api_key = Some(value.to_string()),
         "sn_api_key" => prof.sn_api_key = Some(value.to_string()),
         "default_format" => {
-            let valid = ["json", "table", "yaml", "csv"];
+            let valid = VALID_FORMATS;
             if !valid.contains(&value) {
                 return Err(NlError::Validation(format!(
                     "Invalid format '{value}'. Valid values: {}",
@@ -413,15 +407,17 @@ pub fn profile_list() -> Result<Vec<String>, NlError> {
 
 // ── Masking helper ────────────────────────────────────────────────
 
-/// Masks an API key for display: shows `****...` plus the last 3 characters.
+/// Masks an API key for display: shows `****...` plus the last 2 characters.
 ///
 /// Keys shorter than 4 characters are fully masked as `****`.
 fn mask_value(val: &str) -> String {
-    if val.len() <= 3 {
+    let char_count = val.chars().count();
+    if char_count <= 3 {
         "****".to_string()
     } else {
-        let last3 = &val[val.len() - 3..];
-        format!("****...{last3}")
+        // Take the last 2 Unicode scalar values (characters), preserving order.
+        let last2: String = val.chars().skip(char_count - 2).collect();
+        format!("****...{last2}")
     }
 }
 
@@ -433,7 +429,7 @@ mod tests {
 
     #[test]
     fn test_mask_value_normal() {
-        assert_eq!(mask_value("abcdefghij"), "****...hij");
+        assert_eq!(mask_value("abcdefghij"), "****...ij");
     }
 
     #[test]
@@ -444,7 +440,7 @@ mod tests {
 
     #[test]
     fn test_mask_value_four_chars() {
-        assert_eq!(mask_value("abcd"), "****...bcd");
+        assert_eq!(mask_value("abcd"), "****...cd");
     }
 
     #[test]
@@ -589,7 +585,7 @@ default_format = "table"
 
         let profile = &config.profiles["default"];
         let masked = profile.masked_edm_api_key();
-        assert_eq!(masked, "****...abc");
+        assert_eq!(masked, "****...bc");
     }
 
     #[test]
