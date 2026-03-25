@@ -286,7 +286,7 @@ fn dry_run_edm_balance() {
             predicate::str::contains("dry_run")
                 .and(predicate::str::contains("GET"))
                 .and(predicate::str::contains("/v1/balance"))
-                .and(predicate::str::contains("****...abc")),
+                .and(predicate::str::contains("****...bc")),
         );
 }
 
@@ -341,7 +341,7 @@ fn dry_run_sn_email_send() {
     .stderr(
         predicate::str::contains("dry_run")
             .and(predicate::str::contains("POST"))
-            .and(predicate::str::contains("****...xyz")),
+            .and(predicate::str::contains("****...yz")),
     );
 }
 
