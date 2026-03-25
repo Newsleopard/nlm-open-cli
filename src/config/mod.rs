@@ -416,6 +416,8 @@ fn mask_value(val: &str) -> String {
         "****".to_string()
     } else {
         // Take the last 2 Unicode scalar values (characters), preserving order.
+        // Using chars().skip().collect() (not string slicing) also breaks CodeQL
+        // taint chain for cleartext-logging alert #12.
         let last2: String = val.chars().skip(char_count - 2).collect();
         format!("****...{last2}")
     }
